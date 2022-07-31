@@ -1,0 +1,85 @@
+﻿<div class="calendar">
+    <div class="datetime">
+        <p> @calendar </p>
+        <p> @LunarCalendar </p> 
+        <p> @Xun @Kong</p>
+        <p> @PrevJie</p>
+        <p> @NextJie</p>
+</div>
+
+    <div class="SiKe">
+        <div class="SiKe-Unit">
+            <p class="SiKe-Title">年</p>
+            <p class="SiKe-Date"> @YearGan </p>
+            <p class="SiKe-Date"> @YearZhi </p>
+        </div>
+        <div class="SiKe-Unit">
+            <p class="SiKe-Title">月</p>
+            <p class="SiKe-Date"> @MonthGan </p>
+            <p class="SiKe-Date"> @MonthZhi </p>
+        </div>
+        <div class="SiKe-Unit">
+            <p class="SiKe-Title">日</p>
+            <p class="SiKe-Date"> @DayGan </p>
+            <p class="SiKe-Date"> @DayZhi </p>
+        </div>
+        <div class="SiKe-Unit">
+            <p class="SiKe-Title">时</p>
+            <p class="SiKe-Date"> @TimeGan </p>
+            <p class="SiKe-Date"> @TimeZhi </p>
+        </div>
+    </div>
+</div>
+@code {
+    private string calendar = "公历：";
+    private string LunarCalendar = "农历：";
+    private string YearGan = "";
+    private string YearZhi = "";
+    private string MonthGan = "";
+    private string MonthZhi = "";
+    private string DayGan = "";
+    private string DayZhi = "";
+    private string TimeGan = "";
+    private string TimeZhi = "";
+    private string Xun = "";
+    private string Kong = "";
+    private string PrevJie = "";
+    private string NextJie = "";
+    private System.Timers.Timer timer = new System.Timers.Timer(1000);
+
+    private void UpdateCalendar(object? obj,System.Timers.ElapsedEventArgs e){
+        GetCalendar(DateTime.Now);
+    }
+    private void GetCalendar(DateTime time){
+        Lunar lunar = new Lunar(time);
+        calendar = "公历：" + time.ToString("yyyy-MM-dd HH:mm:ss");
+        YearGan = lunar.getYearGan();
+        YearZhi = lunar.getYearZhi();
+        MonthGan = lunar.getMonthGan();
+        MonthZhi = lunar.getMonthZhi();
+        DayGan = lunar.getDayGan();
+        DayZhi = lunar.getDayZhi();
+        TimeGan = lunar.getTimeGan();
+        TimeZhi = lunar.getTimeZhi();
+        LunarCalendar = "农历：" + YearGan + YearZhi + "年  " + 
+                    lunar.getMonthInChinese() + "月" + lunar.getDayInChinese();
+        Xun = lunar.getDayXun() + "旬";
+        Kong = lunar.getDayXunKong() + "空";
+        PrevJie = lunar.getPrevJieQi(true).getName() + " " + lunar.getPrevJieQi(true).getSolar().toYmdHms();
+        NextJie = lunar.getNextJieQi(true).getName() + " " + lunar.getNextJieQi(true).getSolar().toYmdHms();
+        StateHasChanged();
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        GetCalendar(DateTime.Now);
+        timer.AutoReset = true;
+        timer.Elapsed += new System.Timers.ElapsedEventHandler(UpdateCalendar);
+        timer.Start();
+        return base.OnInitializedAsync();
+    }
+    public void QiKe(DateTime time)
+    {
+        GetCalendar(time);
+    }
+}

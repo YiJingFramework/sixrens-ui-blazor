@@ -1,0 +1,28 @@
+﻿div.SiKe {
+    width: auto;
+    display:inline-block;
+}
+p.SiKe-Title{
+    color:red;
+    font-size:30px;
+}
+p.SiKe-Date{
+    font-size:20px;
+}
+div.SiKe-Unit {
+    text-align: center;
+    width: 25%;
+    border: 5px;
+    float:left;
+}
+div.datetime {
+    font-size:20px;
+}
+div.calendar{
+    margin:auto;
+    float:right;
+    display:flex;
+    flex-wrap:wrap;
+    flex-flow :wrap;
+    justify-content:space-around;
+}
