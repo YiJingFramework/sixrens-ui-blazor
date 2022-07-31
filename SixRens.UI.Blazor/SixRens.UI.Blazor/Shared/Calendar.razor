@@ -1,85 +1,95 @@
 ﻿<div class="calendar">
     <div class="datetime">
-        <p> @calendar </p>
-        <p> @LunarCalendar </p> 
-        <p> @Xun @Kong</p>
-        <p> @PrevJie</p>
-        <p> @NextJie</p>
-</div>
-
+        <p> 西历：@western </p>
+        <p> 农历：@lunar </p> 
+        <p> @(periodLeader)旬 @(missing)空</p>
+        <p> @previousTerm </p>
+        <p> @nextTerm </p>
+    </div>
     <div class="SiKe">
         <div class="SiKe-Unit">
             <p class="SiKe-Title">年</p>
-            <p class="SiKe-Date"> @YearGan </p>
-            <p class="SiKe-Date"> @YearZhi </p>
+            <p class="SiKe-Date"> @stemOfYear </p>
+            <p class="SiKe-Date"> @branchOfYear </p>
         </div>
         <div class="SiKe-Unit">
             <p class="SiKe-Title">月</p>
-            <p class="SiKe-Date"> @MonthGan </p>
-            <p class="SiKe-Date"> @MonthZhi </p>
+            <p class="SiKe-Date"> @stemOfMonth </p>
+            <p class="SiKe-Date"> @branchOfMonth </p>
         </div>
         <div class="SiKe-Unit">
             <p class="SiKe-Title">日</p>
-            <p class="SiKe-Date"> @DayGan </p>
-            <p class="SiKe-Date"> @DayZhi </p>
+            <p class="SiKe-Date"> @stemOfDate </p>
+            <p class="SiKe-Date"> @branchOfDate </p>
         </div>
         <div class="SiKe-Unit">
             <p class="SiKe-Title">时</p>
-            <p class="SiKe-Date"> @TimeGan </p>
-            <p class="SiKe-Date"> @TimeZhi </p>
+            <p class="SiKe-Date"> @stemOfTime </p>
+            <p class="SiKe-Date"> @branchOfTime </p>
         </div>
     </div>
 </div>
-@code {
-    private string calendar = "公历：";
-    private string LunarCalendar = "农历：";
-    private string YearGan = "";
-    private string YearZhi = "";
-    private string MonthGan = "";
-    private string MonthZhi = "";
-    private string DayGan = "";
-    private string DayZhi = "";
-    private string TimeGan = "";
-    private string TimeZhi = "";
-    private string Xun = "";
-    private string Kong = "";
-    private string PrevJie = "";
-    private string NextJie = "";
-    private System.Timers.Timer timer = new System.Timers.Timer(1000);
 
-    private void UpdateCalendar(object? obj,System.Timers.ElapsedEventArgs e){
-        GetCalendar(DateTime.Now);
-    }
-    private void GetCalendar(DateTime time){
+@implements IDisposable
+
+@code {
+    private string western = "";
+    private string lunar = "";
+
+    private string stemOfYear = "";
+    private string branchOfYear = "";
+    private string stemOfMonth = "";
+    private string branchOfMonth = "";
+    private string stemOfDate = "";
+    private string branchOfDate = "";
+    private string stemOfTime = "";
+    private string branchOfTime = "";
+    private string periodLeader = "";
+    private string missing = "";
+    private string previousTerm = "";
+    private string nextTerm = "";
+
+    private System.Timers.Timer timer = new System.Timers.Timer(200) {
+            AutoReset = true
+        };
+
+    private void UpdateCalendar(DateTime time){
         Lunar lunar = new Lunar(time);
-        calendar = "公历：" + time.ToString("yyyy-MM-dd HH:mm:ss");
-        YearGan = lunar.getYearGan();
-        YearZhi = lunar.getYearZhi();
-        MonthGan = lunar.getMonthGan();
-        MonthZhi = lunar.getMonthZhi();
-        DayGan = lunar.getDayGan();
-        DayZhi = lunar.getDayZhi();
-        TimeGan = lunar.getTimeGan();
-        TimeZhi = lunar.getTimeZhi();
-        LunarCalendar = "农历：" + YearGan + YearZhi + "年  " + 
-                    lunar.getMonthInChinese() + "月" + lunar.getDayInChinese();
-        Xun = lunar.getDayXun() + "旬";
-        Kong = lunar.getDayXunKong() + "空";
-        PrevJie = lunar.getPrevJieQi(true).getName() + " " + lunar.getPrevJieQi(true).getSolar().toYmdHms();
-        NextJie = lunar.getNextJieQi(true).getName() + " " + lunar.getNextJieQi(true).getSolar().toYmdHms();
+        western = $"{time:yyyy-MM-dd HH:mm:ss}";
+
+        var eightChar = lunar.getEightChar();
+        eightChar.setSect(1);
+        stemOfYear = eightChar.getYearGan();
+        branchOfYear = eightChar.getYearZhi();
+        stemOfMonth = eightChar.getMonthGan();
+        branchOfMonth = eightChar.getMonthZhi();
+        stemOfDate = eightChar.getDayGan();
+        branchOfDate = eightChar.getDayZhi();
+        stemOfTime = eightChar.getTimeGan();
+        branchOfTime = eightChar.getTimeZhi();
+
+        periodLeader = eightChar.getDayXun();
+        missing = eightChar.getDayXunKong();
+
+        this.lunar = $"{lunar.getYearInGanZhi()}年{lunar.getMonthInChinese()}月{lunar.getDayInChinese()}";
+
+        previousTerm = $"{lunar.getPrevJieQi(true).getName()} {lunar.getPrevJieQi(true).getSolar().toYmdHms()}";
+        nextTerm = $"{lunar.getNextJieQi(true).getName()} {lunar.getNextJieQi(true).getSolar().toYmdHms()}";
         StateHasChanged();
     }
 
     protected override Task OnInitializedAsync()
     {
-        GetCalendar(DateTime.Now);
-        timer.AutoReset = true;
-        timer.Elapsed += new System.Timers.ElapsedEventHandler(UpdateCalendar);
+        UpdateCalendar(DateTime.Now);
+
+        timer.Elapsed += (_, _) => UpdateCalendar(DateTime.Now);
         timer.Start();
+
         return base.OnInitializedAsync();
     }
-    public void QiKe(DateTime time)
+
+    public void Dispose()
     {
-        GetCalendar(time);
+        this.timer.Dispose();
     }
 }
