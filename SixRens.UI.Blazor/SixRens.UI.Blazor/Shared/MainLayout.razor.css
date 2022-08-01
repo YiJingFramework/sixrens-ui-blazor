@@ -1,3 +1,10 @@
 .page {
     position: static;
 }
+
+div.main{
+    display:flex;
+    flex-flow:wrap;
+    flex-flow:wrap;
+    justify-content:space-around;
+}

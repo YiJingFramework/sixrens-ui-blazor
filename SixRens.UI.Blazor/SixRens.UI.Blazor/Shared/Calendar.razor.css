@@ -1,6 +1,5 @@
 ﻿div.SiKe {
     width: auto;
-    float:right;
 }
 p.SiKe-Title{
     color:red;
@@ -16,6 +15,5 @@ div.SiKe-Unit {
     float:left;
 }
 div.datetime {
-    float:right;
     font-size:15px;
 }
