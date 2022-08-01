@@ -11,7 +11,7 @@ namespace SixRens.UI.Blazor.Services.SixRens
         {
             if (this.pluginPackageManager is null)
             {
-                var saver = await DataSaver.CreateDataSaver(this.dbFactory);
+                var saver = await GetDataSaver();
                 this.pluginPackageManager = new(saver);
             }
             return this.pluginPackageManager;
@@ -22,16 +22,27 @@ namespace SixRens.UI.Blazor.Services.SixRens
         {
             if (this.presetManager is null)
             {
-                var saver = await DataSaver.CreateDataSaver(this.dbFactory);
+                var saver = await GetDataSaver();
                 this.presetManager = new(saver);
             }
             return this.presetManager;
         }
 
-        private readonly IIndexedDbFactory dbFactory;
 
-        public ServiceOfSixRens(IIndexedDbFactory dbFactory)
+        private DataSaver? dataSaver;
+        private async Task<DataSaver> GetDataSaver()
         {
+            if(this.dataSaver is null)
+                dataSaver = await DataSaver.CreateDataSaver(this.dbFactory, logger);
+            return dataSaver;
+        }
+
+        private readonly IIndexedDbFactory dbFactory;
+        private readonly ILogger logger;
+
+        public ServiceOfSixRens(IIndexedDbFactory dbFactory, ILoggerFactory loggerFactory)
+        {
+            logger = loggerFactory.CreateLogger<ServiceOfSixRens>();
             this.dbFactory = dbFactory;
         }
     }

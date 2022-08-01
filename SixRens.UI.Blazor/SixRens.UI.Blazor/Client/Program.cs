@@ -18,6 +18,7 @@ namespace SixRens.UI.Blazor
                         BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
                     };
                 })
+                .AddLogging()
                 .AddSingleton<IIndexedDbFactory, IndexedDbFactory>()
                 .AddSingleton<ServiceOfSixRens>();
 

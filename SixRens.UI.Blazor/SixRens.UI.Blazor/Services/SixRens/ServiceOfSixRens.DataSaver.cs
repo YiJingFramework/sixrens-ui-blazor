@@ -9,15 +9,17 @@ namespace SixRens.UI.Blazor.Services.SixRens
         private sealed class DataSaver : I插件包管理器储存器, I预设管理器储存器
         {
             private readonly DbCodeFirst db;
+            private ILogger logger;
 
-            public static async Task<DataSaver> CreateDataSaver(IIndexedDbFactory dbFactory)
+            public static async Task<DataSaver> CreateDataSaver(IIndexedDbFactory dbFactory, ILogger logger)
             {
-                return new(await dbFactory.Create<DbCodeFirst>(Names.IndexedDb.SixRensPluginsAndPresets));
+                return new(await dbFactory.Create<DbCodeFirst>(Names.IndexedDb.SixRensPluginsAndPresets), logger);
             }
 
-            private DataSaver(DbCodeFirst db)
+            private DataSaver(DbCodeFirst db, ILogger logger)
             {
                 this.db = db;
+                this.logger = logger;
             }
 
             public void 储存插件包文件(string 插件包文件名, Stream 插件包)
@@ -30,7 +32,13 @@ namespace SixRens.UI.Blazor.Services.SixRens
 
             public void 储存预设文件(string 预设名, string 内容)
             {
-                this.db.Presets.Add(new() { Name = 预设名, Value = 内容 });
+                logger.LogWarning($"{预设名}{内容}");
+                var item = new DbCodeFirst.NamedDbItem<string>() {
+                    Name = 预设名,
+                    Value = 内容
+                };
+                this.db.Presets.Remove(item);
+                this.db.Presets.Add(item);
                 _ = this.db.SaveChanges();
             }
 
@@ -82,6 +90,16 @@ namespace SixRens.UI.Blazor.Services.SixRens
             {
                 return this.db.Presets
                     .Select(item => (item.Name, item.Value));
+            }
+
+            public Stream? 获取插件包文件(string 插件包文件名)
+            {
+                var item = this.db.PluginPackages
+                    .Where(item => item.Name == 插件包文件名)
+                    .SingleOrDefault(defaultValue: null);
+                if (item is null)
+                    return null;
+                return new MemoryStream(item.Value);
             }
         }
     }
