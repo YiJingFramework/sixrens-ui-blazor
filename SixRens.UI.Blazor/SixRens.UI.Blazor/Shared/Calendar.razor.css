@@ -1,13 +1,13 @@
 ﻿div.SiKe {
     width: auto;
-    display:inline-block;
+    float:right;
 }
 p.SiKe-Title{
     color:red;
-    font-size:30px;
+    font-size:20px;
 }
 p.SiKe-Date{
-    font-size:20px;
+    font-size:15px;
 }
 div.SiKe-Unit {
     text-align: center;
@@ -16,13 +16,6 @@ div.SiKe-Unit {
     float:left;
 }
 div.datetime {
-    font-size:20px;
-}
-div.calendar{
-    margin:auto;
     float:right;
-    display:flex;
-    flex-wrap:wrap;
-    flex-flow :wrap;
-    justify-content:space-around;
+    font-size:15px;
 }
