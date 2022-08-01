@@ -5,7 +5,7 @@ VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SixRens.UI.Blazor", "SixRens.UI.Blazor\SixRens.UI.Blazor.csproj", "{98214F4F-6869-4718-A5D1-B851B90C0579}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PresetGenerator", "PresetGenerator\PresetGenerator.csproj", "{6709796A-3046-4B97-875B-259D8760E282}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PresetGenerator", "PresetGenerator\PresetGenerator.csproj", "{6709796A-3046-4B97-875B-259D8760E282}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

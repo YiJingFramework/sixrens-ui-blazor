@@ -6,5 +6,6 @@ div.SanZhuan{
 }
 
 span.SanZhuan-Title{
-
+    color:red;
+    font-size:20px;
 }
