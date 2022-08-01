@@ -12,7 +12,7 @@ namespace SixRens.UI.Blazor.Services.SixRens
 
             public static async Task<DataSaver> CreateDataSaver(IIndexedDbFactory dbFactory)
             {
-                return new(await dbFactory.Create<DbCodeFirst>("sixrens-plugins-and-presets"));
+                return new(await dbFactory.Create<DbCodeFirst>(Names.IndexedDb.SixRensPluginsAndPresets));
             }
 
             private DataSaver(DbCodeFirst db)

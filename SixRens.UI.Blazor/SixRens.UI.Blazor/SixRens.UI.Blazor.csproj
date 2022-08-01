@@ -20,6 +20,8 @@
 
   <ItemGroup>
     <Folder Include="Extensions\" />
+    <Folder Include="wwwroot\plugin-packages\" />
+    <Folder Include="wwwroot\default-presets\" />
   </ItemGroup>
 
 </Project>
