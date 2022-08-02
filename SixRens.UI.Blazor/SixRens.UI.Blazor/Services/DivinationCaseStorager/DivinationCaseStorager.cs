@@ -42,6 +42,12 @@ namespace SixRens.UI.Blazor.Services.DivinationCaseStorager
             return 占例.反序列化(item.Content);
         }
 
+        public async Task<IEnumerable<string>> ListCases()
+        {
+            using var db = await this.GetDb();
+            return db.DivinationCases.Select(item => item.Name);
+        }
+
         public async Task RemoveCase(string name)
         {
             using var db = await this.GetDb();
