@@ -1,0 +1,29 @@
+﻿@page "/cases"
+@using SixRens.Core.占例存取
+
+<li>
+    @foreach(var item in items)
+    {
+        <ul>
+            <button @onclick="Open(item)">@item</button>
+        </ul>
+    }
+    <button @onclick="Refresh">刷新</button>
+</li>
+
+@inject SixRens.UI.Blazor.Services.DivinationCaseStorager.DivinationCaseStorager storager
+@code {
+    private string[] items = Array.Empty<string>();
+
+    private async Task Refresh()
+    {
+        items = (await storager.ListCases()).ToArray();
+        this.StateHasChanged();
+    }
+
+    private async Task Open(string name)
+    {
+        占例? dCase = await storager.GetCase(name);
+        // 然后捏？
+    }
+}
