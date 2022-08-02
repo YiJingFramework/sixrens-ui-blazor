@@ -1,0 +1,25 @@
+﻿<p> @a </p>
+<p> <span> @b1 </span> @b2 </p>
+<p> @c </p>
+
+@code {
+	[Parameter]
+	public byte clockwise_location{
+		get
+		{
+			return clockwise_location;
+		}
+		set
+		{
+			a = "六合";
+			b1 = "子";
+			b2 = "戊";
+			c = "葵巳";
+		}
+	}
+
+	private string a;
+	private string b1;
+	private string b2;
+	private string c;
+}
