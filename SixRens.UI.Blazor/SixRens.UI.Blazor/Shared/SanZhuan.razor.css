@@ -1,11 +1,12 @@
-﻿body {
-}
-
-div.SanZhuan{
+﻿div.SanZhuan{
 
 }
 
-span.SanZhuan-Title{
-    color:red;
-    font-size:20px;
+span.SanZhuan-Title {
+    color: red;
+    font-size: max(2vw,20px);
+}
+
+p{
+    font-size:max(1.5vw,15px);
 }
