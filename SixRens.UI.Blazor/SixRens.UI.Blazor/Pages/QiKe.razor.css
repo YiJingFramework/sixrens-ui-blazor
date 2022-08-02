@@ -1,0 +1,27 @@
+﻿body{
+
+}
+
+div{
+    display:flex;
+    flex-flow:wrap;
+    flex-wrap:wrap;
+}
+
+button{
+    display:block;
+    color: black;
+    background-color: #0ff;
+    width:20vw;
+    height:8vh;
+    min-width:200px;
+    min-height:50px;
+    border-radius:20px;
+    border-style:none;
+    font-family:KaiTi;
+    font-size:max(4vh,20px);
+    margin:0 auto;
+}
+button:active{
+    background-color:deepskyblue;
+}

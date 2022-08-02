@@ -1,9 +1,18 @@
 ﻿@page "/"
+@inject NavigationManager NavigationManager
 
-
-<NavLink href=""></NavLink>
-<NavLink href="Main">起课</NavLink>
+<PageTitle>起课</PageTitle>
+<body>
+	<div> 
+		<button> 取占例 </button>
+		<button> 存占例 </button>
+	</div>
+	<button class="QiKe-Button" @onclick="QiKe_OnClick"> 起课 </button>
+</body>
 
 @code {
+	private void QiKe_OnClick(){
+		NavigationManager.NavigateTo("Main");
+	}
 
 }
