@@ -16,6 +16,7 @@ div.TianPan-Item {
     height: 100%;
     border: 0.1cm solid red;
     text-align: center;
+    font-size: max(2vw,16px);
 }
 div.bigbox{
     grid-row-start:2;

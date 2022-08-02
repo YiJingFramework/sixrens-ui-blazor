@@ -1,11 +1,5 @@
 ﻿span {
-    position:relative;
-    font-size: 2rem;
+    font-size: max(4vw,32px); 
     font-weight: 700;
-}
-p {
-    font-size:1rem;
-    margin: 0px auto;
     font-family: KaiTi;
-    color: black;
 }
