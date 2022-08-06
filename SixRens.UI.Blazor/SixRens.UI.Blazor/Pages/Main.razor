@@ -8,8 +8,24 @@
 </div>
 <TianPan/>
 
-
-@code {
+@inject SixRens.UI.Blazor.Services.DivinationCaseStorager.DivinationCaseStorager storager
+@code 
+{
 	[Parameter]
-	public Guid guid{ get; set; }
+	public string? CaseName { get; set; }
+
+	private string? currentCaseName;
+	private 占例? currentCase;
+
+	private async Task<占例?> GetCase()
+	{
+		if (CaseName is null)
+			return null;
+		if (currentCaseName != CaseName)
+		{
+			currentCase = await storager.GetCase(CaseName);
+			currentCaseName = CaseName;
+		}
+		return currentCase;
+	}
 }

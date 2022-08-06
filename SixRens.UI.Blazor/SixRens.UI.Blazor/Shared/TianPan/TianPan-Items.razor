@@ -3,16 +3,18 @@
 @c  
 
 @code {
+	private EarthlyBranch clockwiseLocation;
 	[Parameter]
-	public byte clockwise_location{
+	public EarthlyBranch ClockwiseLocation{
 		get
 		{
-			return clockwise_location;
+			return clockwiseLocation;
 		}
 		set
 		{
+			clockwiseLocation = value;
 			a = "六合";
-			b1 = "子";
+			b1 = value.ToString("C");
 			b2 = "戊";
 			c = "葵巳";
 		}
