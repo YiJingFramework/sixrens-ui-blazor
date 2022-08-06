@@ -1,5 +1,4 @@
 ﻿@page "/Main"
-
 @layout MainLayout
 
 <PageTitle>六壬</PageTitle>
@@ -9,5 +8,8 @@
 </div>
 <TianPan/>
 
+
 @code {
+	[Parameter]
+	public Guid guid{ get; set; }
 }

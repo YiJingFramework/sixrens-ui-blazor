@@ -1,6 +1,8 @@
 ﻿@page "/test"
 
+@inject NavigationManager NavigationManager
 <button @onclick="OnC">向Indexeddb导入测试用占例</button>
+<button @onclick="OnR"> Return</button>
 
 @inject SixRens.UI.Blazor.Services.SixRens.ServiceOfSixRens sixRens
 @inject SixRens.UI.Blazor.Services.DivinationCaseStorager.DivinationCaseStorager storager
@@ -11,5 +13,8 @@
     {
         var c = Core.占例存取.占例.反序列化(j);
         await storager.UpdateCase("myCase", c);
+    }
+    private void OnR(){
+        NavigationManager.NavigateTo("Main");
     }
 }
