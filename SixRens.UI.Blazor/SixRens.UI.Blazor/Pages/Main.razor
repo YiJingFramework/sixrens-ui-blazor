@@ -1,4 +1,8 @@
-﻿@page "/Main"
+﻿@page "/Main/{CaseName}"
+@inject HttpClient http
+@inject NavigationManager NavigationManager
+@inject SixRens.UI.Blazor.Services.SixRens.ServiceOfSixRens sixRens
+@inject SixRens.UI.Blazor.Services.DivinationCaseStorager.DivinationCaseStorager storager
 @layout MainLayout
 
 <PageTitle>六壬</PageTitle>

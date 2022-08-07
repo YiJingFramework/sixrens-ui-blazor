@@ -1,6 +1,6 @@
 ﻿@page "/test"
 
-<button @onclick="ImportTestingCase">导入测试用占例到 IndexedDb 占例库</button>
+
 <button @onclick="Return">返回主页</button>
 
 @inject HttpClient http
@@ -10,12 +10,6 @@
 
 @code 
 {
-    private async Task ImportTestingCase()
-    {
-        var s = await http.GetStringAsync("temp/testingCase.json");
-        var c = Core.占例存取.占例.反序列化(s);
-        await storager.UpdateCase("testingCase", c);
-    }
 
     private void Return()
     {

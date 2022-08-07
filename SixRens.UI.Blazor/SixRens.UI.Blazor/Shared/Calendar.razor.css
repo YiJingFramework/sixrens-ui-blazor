@@ -1,14 +1,14 @@
-﻿div.SiKe {
+﻿div.Date {
     width: auto;
 }
-p.SiKe-Title{
+p.Date-Title{
     color:red;
     font-size:max(2vw,20px);
 }
-p.SiKe-Date {
+p.Date-Date {
     font-size: max(1.5vw,15px);
 }
-div.SiKe-Unit {
+div.Date-Unit {
     text-align: center;
     width: 25%;
     float:left;

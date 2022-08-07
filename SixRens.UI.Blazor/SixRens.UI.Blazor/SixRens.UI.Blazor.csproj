@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Shared\SiKe.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BlazorDownloadFile" Version="2.4.0.2" />
     <PackageReference Include="IndexedDB.Blazor" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.7" />
@@ -23,6 +27,18 @@
     <Folder Include="Extensions\" />
     <Folder Include="wwwroot\plugin-packages\" />
     <Folder Include="wwwroot\default-presets\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Shared\SiKe.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Shared\SiKe.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Shared\SiKe.razor" />
   </ItemGroup>
 
 </Project>
