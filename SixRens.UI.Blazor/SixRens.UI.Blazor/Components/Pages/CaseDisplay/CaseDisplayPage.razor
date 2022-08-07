@@ -3,31 +3,17 @@
 @inject SixRens.UI.Blazor.Services.SixRens.ServiceOfSixRens sixRens
 @inject SixRens.UI.Blazor.Services.DivinationCaseStorager.DivinationCaseStorager storager
 
-<p> @CaseName </p>
-<PageTitle>六壬</PageTitle>
+<p> @Parameters?.CaseName </p>
 <div class="main">
-	<Calendar/>
-	<SanZhuan/>
+	<Calendar />
+	<SanZhuan Plate="Parameters?.Case?.壬式"/>
 </div>
-<TianPan/>
+<TianPan Plate="Parameters?.Case?.壬式"/>
 
 @inject ILogger<CaseDisplayPage> logger
 @inject SixRens.UI.Blazor.Services.DivinationCaseStorager.DivinationCaseStorager storager
 @code 
 {
 	[Parameter]
-	public string? CaseName { get; set; }
-
-	[Parameter]
-	public 占例? Case { get; set; }
-
-	protected override async Task OnInitializedAsync()
-	{
-		logger.LogInformation($"OnInitializedAsync: Case is {(Case is null ? "" : "not")} null.");
-	}
-
-	protected override async Task OnParametersSetAsync()
-	{
-		logger.LogInformation($"OnParametersSetAsync: Case is {(Case is null ? "" : "not")} null.");
-	}
+	public CaseDisplayParameters? Parameters { get; set; }
 }

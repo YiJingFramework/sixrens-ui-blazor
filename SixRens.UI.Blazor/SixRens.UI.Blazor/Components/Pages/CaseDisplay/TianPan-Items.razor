@@ -1,27 +1,36 @@
-﻿@a <br/>
-<span> @b1 </span> @b2 <br/>
-@c  
+﻿@general <br/>
+<span> @($"{upperBranch:C}") </span> @NullableStemToString(upperStem) <br/>
+@($"{Location:C}{NullableStemToString(lowerStem)}")  
 
-@code {
-	private EarthlyBranch clockwiseLocation;
+@inject ILogger<TianPan_Items> logger
+@code 
+{
 	[Parameter]
-	public EarthlyBranch ClockwiseLocation{
-		get
-		{
-			return clockwiseLocation;
-		}
-		set
-		{
-			clockwiseLocation = value;
-			a = "六合";
-			b1 = value.ToString("C");
-			b2 = "戊";
-			c = "葵巳";
-		}
+	public EarthlyBranch Location { get; set; }
+
+	[Parameter]
+	public 壬式? Plate { get; set; }
+
+	private 天将 general;
+	private EarthlyBranch upperBranch;
+	private HeavenlyStem? upperStem;
+	private HeavenlyStem? lowerStem;
+
+	private static string NullableStemToString(HeavenlyStem? stem)
+	{
+		return stem.HasValue ? stem.Value.ToString("C") : "○";
 	}
 
-	private string a;
-	private string b1;
-	private string b2;
-	private string c;
+	protected override async Task OnParametersSetAsync()
+	{
+		if (Plate is null)
+			return;
+
+		this.upperBranch = Plate.天地盘.取乘神(this.Location);
+
+		this.upperStem = Plate.起课参数.年月日时.旬所在.获取对应天干(this.upperBranch);
+		this.lowerStem = Plate.起课参数.年月日时.旬所在.获取对应天干(this.Location);
+
+		this.general = Plate.天将盘.取乘将(this.upperBranch);
+	}
 }

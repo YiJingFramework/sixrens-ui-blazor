@@ -1,15 +1,24 @@
 ﻿<div class="SanZhuan">
-	<p><span class="SanZhuan-Title">初</span> @a1 </p>
-	<p><span class="SanZhuan-Title">中</span> @a2 </p>
-	<p><span class="SanZhuan-Title">末</span> @a3 </p>
+	<p><span class="SanZhuan-Title">初</span> @($"{branch1:C}") </p>
+	<p><span class="SanZhuan-Title">中</span> @($"{branch2:C}") </p>
+	<p><span class="SanZhuan-Title">末</span> @($"{branch3:C}") </p>
 </div>
 
 
 @code {
 	[Parameter]
-	public char Index{ get; set; }
+	public 壬式? Plate { get; set; }
 
-	private string a1 = "";
-	private string a2 = "";
-	private string a3 = "";
+	private EarthlyBranch branch1;
+	private EarthlyBranch branch2;
+	private EarthlyBranch branch3;
+
+	protected override async Task OnParametersSetAsync()
+	{
+		if (Plate is null)
+			return;
+		this.branch1 = Plate.三传.初传;
+		this.branch2 = Plate.三传.中传;
+		this.branch3 = Plate.三传.末传;
+	}
 }
