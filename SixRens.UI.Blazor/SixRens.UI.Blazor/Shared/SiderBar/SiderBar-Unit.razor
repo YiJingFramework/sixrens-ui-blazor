@@ -1,17 +1,13 @@
 ﻿@inject NavigationManager NavigationManager
 
-<div @onclick="OnClick">
+<div @onclick="async () => await OnSelected.InvokeAsync()">
 	@CaseName
 </div>
 
 @code {
 	[Parameter]
-	public string? CaseName { get; set; }
-	[CascadingParameter]
-	private string? String { get; set; }
+	public string CaseName { get; set; } = string.Empty;
 
-	private void OnClick() {
-		String = CaseName;
-		NavigationManager.NavigateTo("Main");
-	}
+	[Parameter]
+	public EventCallback OnSelected { get; set; }
 }

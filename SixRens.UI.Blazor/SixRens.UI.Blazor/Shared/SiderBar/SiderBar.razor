@@ -1,18 +1,21 @@
 ﻿<div>
-	@if (Strings != null)
+	@foreach(string c in cases)
 	{
-		@foreach(string item in Strings)
-		{
-			<SiderBar_Unit CaseName="@item"/>
-		}
+		<SiderBar_Unit CaseName="@c" OnSelected="async () => await OnCaseSelected.InvokeAsync(c)"/>
 	}
 	<button class="Add">+</button>
-	<p> @String </p>
+	<p> 啥 string </p>
 </div>
 
+@inject SixRens.UI.Blazor.Services.DivinationCaseStorager.DivinationCaseStorager storager
 @code {
-	[CascadingParameter]
-	private List<string>? Strings{ get; set; }
-	[CascadingParameter]
-	private string? String{ get; set; }
+	private IEnumerable<string> cases = Array.Empty<string>();
+
+	[Parameter]
+	public EventCallback<string> OnCaseSelected { get; set; }
+
+	protected override async Task OnInitializedAsync()
+	{
+		this.cases = await storager.ListCases();
+	}
 }

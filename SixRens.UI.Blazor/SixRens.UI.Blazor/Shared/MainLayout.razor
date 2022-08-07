@@ -1,18 +1,16 @@
 ﻿@inherits LayoutComponentBase
 @inject SixRens.UI.Blazor.Services.DivinationCaseStorager.DivinationCaseStorager storager
-
+@inject ILogger<MainLayout> logger
 <div class="page">
-	<CascadingValue Value="CurrentCaseName">
-	<CascadingValue Value="CaseNames">
-	<SiderBar/>
+	<SiderBar OnCaseSelected="OnCaseSelected"/>
 	<div class="main">
 		@Body
 	</div>
-	</CascadingValue>
-	</CascadingValue>
 </div>
 
 @code{
-	private List<string>? CaseNames = new List<string>(){"1","2","3","4"};
-	private string? CurrentCaseName;
+	private async Task OnCaseSelected(string caseName)
+	{
+		logger.LogInformation(caseName);
+	}
 }
