@@ -1,0 +1,45 @@
+﻿@using SixRens.UI.Blazor.Components.SiderBar
+@using SixRens.UI.Blazor.Components.Pages.CaseDisplay
+@using SixRens.UI.Blazor.Components.Pages.DivinationPractice
+@using SixRens.UI.Blazor.Components.Pages.Introduction
+@using System.Diagnostics
+
+<div class="page">
+	<SiderBar OnCaseSelected="OnCaseSelected"/>
+
+	<div class="main" hidden="@(page is not PageDisplayState.Introduction)">
+		<IntroductionPage />
+	</div>
+
+	<div class="main" hidden="@(page is not PageDisplayState.CaseDisplay)">
+		<CaseDisplayPage Case="@c"/>
+	</div>
+
+	<div class="main" hidden="@(page is not PageDisplayState.DivinationPractice)">
+		<QiKe />
+	</div>
+</div>
+
+@inject ILogger<Root> logger
+@inject SixRens.UI.Blazor.Services.DivinationCaseStorager.DivinationCaseStorager storager
+@code
+{
+	private 占例? c;
+
+	private async Task OnCaseSelected(string caseName)
+	{
+		page = PageDisplayState.CaseDisplay;
+		c = await storager.GetCase(caseName);
+		this.StateHasChanged();
+	}
+
+	#region Pages
+	private PageDisplayState page = PageDisplayState.Introduction;
+	private enum PageDisplayState
+	{
+		Introduction,
+		CaseDisplay,
+		DivinationPractice
+	}
+	#endregion
+}
