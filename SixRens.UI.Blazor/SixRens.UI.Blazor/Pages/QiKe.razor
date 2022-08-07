@@ -2,6 +2,7 @@
 @inject NavigationManager NavigationManager
 @inject SixRens.UI.Blazor.Services.SixRens.ServiceOfSixRens sixRens
 @inject SixRens.UI.Blazor.Services.DivinationCaseStorager.DivinationCaseStorager storager
+@inject HttpClient http
 
 <PageTitle>起课</PageTitle>
 <body>
@@ -20,8 +21,8 @@
 </body>
 
 @code {
-	private DateOnly Date = DateOnly.Now;
-	private TimeOnly Time = TimeOnly.Now;
+	private DateOnly Date = DateOnly.FromDateTime(DateTime.Now);
+	private TimeOnly Time = TimeOnly.FromDateTime(DateTime.Now);
 	private DateTime Get
 	{
 		get
