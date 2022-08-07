@@ -1,10 +1,18 @@
 ﻿@inherits LayoutComponentBase
+@inject SixRens.UI.Blazor.Services.DivinationCaseStorager.DivinationCaseStorager storager
 
-<body>
-	<div class="SideBar">
-		<SideBar/>
-	</div>
-	<div>
+<div class="page">
+	<CascadingValue Value="CurrentCaseName">
+	<CascadingValue Value="CaseNames">
+	<SiderBar/>
+	<div class="main">
 		@Body
 	</div>
-</body>
+	</CascadingValue>
+	</CascadingValue>
+</div>
+
+@code{
+	private List<string>? CaseNames = new List<string>(){"1","2","3","4"};
+	private string? CurrentCaseName;
+}

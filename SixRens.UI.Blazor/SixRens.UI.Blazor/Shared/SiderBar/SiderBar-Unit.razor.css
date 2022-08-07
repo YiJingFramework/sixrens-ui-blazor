@@ -1,0 +1,6 @@
+﻿div {
+    color: lightcyan;
+    background-color: darkgrey;
+    width: 100%;
+    font-size: max(15px,3.5vh);
+}

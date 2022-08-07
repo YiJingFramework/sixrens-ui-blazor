@@ -1,0 +1,17 @@
+﻿@inject NavigationManager NavigationManager
+
+<div @onclick="OnClick">
+	@CaseName
+</div>
+
+@code {
+	[Parameter]
+	public string? CaseName { get; set; }
+	[CascadingParameter]
+	private string? String { get; set; }
+
+	private void OnClick() {
+		String = CaseName;
+		NavigationManager.NavigateTo("Main");
+	}
+}

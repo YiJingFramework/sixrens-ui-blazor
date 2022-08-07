@@ -1,0 +1,18 @@
+﻿<div>
+	@if (Strings != null)
+	{
+		@foreach(string item in Strings)
+		{
+			<SiderBar_Unit CaseName="@item"/>
+		}
+	}
+	<button class="Add">+</button>
+	<p> @String </p>
+</div>
+
+@code {
+	[CascadingParameter]
+	private List<string>? Strings{ get; set; }
+	[CascadingParameter]
+	private string? String{ get; set; }
+}

@@ -1,10 +1,11 @@
-﻿@page "/Main/{CaseName}"
+﻿@page "/Main"
 @inject HttpClient http
 @inject NavigationManager NavigationManager
 @inject SixRens.UI.Blazor.Services.SixRens.ServiceOfSixRens sixRens
 @inject SixRens.UI.Blazor.Services.DivinationCaseStorager.DivinationCaseStorager storager
 @layout MainLayout
 
+<p> @CaseName </p>
 <PageTitle>六壬</PageTitle>
 <div class="main">
 	<Calendar/>
@@ -12,11 +13,12 @@
 </div>
 <TianPan/>
 
+
 @inject SixRens.UI.Blazor.Services.DivinationCaseStorager.DivinationCaseStorager storager
 @code 
 {
-	[Parameter]
-	public string? CaseName { get; set; }
+	[CascadingParameter]
+	private string? CaseName { get; set; }
 
 	private string? currentCaseName;
 	private 占例? currentCase;
@@ -25,11 +27,7 @@
 	{
 		if (CaseName is null)
 			return null;
-		if (currentCaseName != CaseName)
-		{
-			currentCase = await storager.GetCase(CaseName);
-			currentCaseName = CaseName;
-		}
+		currentCase = await storager.GetCase(CaseName);
 		return currentCase;
 	}
 }

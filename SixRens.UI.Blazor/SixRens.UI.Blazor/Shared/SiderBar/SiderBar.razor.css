@@ -1,0 +1,22 @@
+﻿div {
+    height: 100%;
+    width: auto;
+    max-width: 200px;
+    position: fixed;
+}
+
+button.Add{
+    height:30px;
+    width:auto;
+    display:block;
+    
+    bottom:0;
+    font-weight:700;
+    color:lightcyan;
+    background-color:darkgrey;
+    border-style:none;
+}
+
+button.Add:active{
+    background-color:lightgreen;
+}
