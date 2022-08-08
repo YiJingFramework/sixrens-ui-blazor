@@ -1,7 +1,7 @@
 ﻿<div>
-	@foreach(string c in cases)
+	@foreach(var c in cases)
 	{
-		<SiderBar_Unit CaseName="@c" OnSelected="async () => await OnCaseSelected.InvokeAsync(c)"/>
+		<SiderBar_Unit CaseName="@(c.name)" OnSelected="async () => await OnCaseSelected.InvokeAsync(c.id)"/>
 	}
 	<div>
 		<button @onclick="Open">+</button>
@@ -18,12 +18,12 @@
 
 @inject SixRens.UI.Blazor.Services.DivinationCaseStorager.DivinationCaseStorager storager
 @code {
-	private IEnumerable<string> cases = Array.Empty<string>();
+	private IEnumerable<(long id, string name)> cases = Array.Empty<(long, string)>();
 
 	private bool ShowDialog = false;
 
 	[Parameter]
-	public EventCallback<string> OnCaseSelected { get; set; }
+	public EventCallback<long> OnCaseSelected { get; set; }
 
 	protected override async Task OnInitializedAsync()
 	{

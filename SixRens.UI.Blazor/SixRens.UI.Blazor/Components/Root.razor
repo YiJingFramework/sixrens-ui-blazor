@@ -36,11 +36,11 @@
 
 	private CaseDisplayParameters? caseDisplayParameters;
 
-	private async Task OnCaseSelected(string caseName)
+	private async Task OnCaseSelected(long caseId)
 	{
 		page = PageDisplayState.CaseDisplay;
-		var c = await storager.GetCase(caseName);
-		this.caseDisplayParameters = new(c, caseName);
+		var c = await storager.GetCase(caseId);
+		this.caseDisplayParameters = new(c.dCase, c.name);
 
 		this.StateHasChanged();
 	}

@@ -5,9 +5,8 @@
         public static class IndexedDb
         {
             public const string FirstTimeUse = "first-time-use";
-
-            public const string SixRensPluginsAndPresets = "sixrens-plugins-and-presets";
-
+            public const string SixRensPlugins = "sixrens-plugins";
+            public const string SixRensPresets = "sixrens-presets";
             public const string DivinationCases = "divination-cases";
         }
     }

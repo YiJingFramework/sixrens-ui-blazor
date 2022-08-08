@@ -1,9 +1,9 @@
 using BlazorDownloadFile;
-using IndexedDB.Blazor;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using SixRens.UI.Blazor.Services.DivinationCaseStorager;
 using SixRens.UI.Blazor.Services.SixRens;
+using TG.Blazor.IndexedDB;
 
 namespace SixRens.UI.Blazor
 {
@@ -28,14 +28,16 @@ namespace SixRens.UI.Blazor
 
         private static void RegisterThirdPartyServices(IServiceCollection services)
         {
-            _ = services.AddSingleton<IIndexedDbFactory, IndexedDbFactory>();
             _ = services.AddBlazorDownloadFile(ServiceLifetime.Singleton);
+            _ = services.AddIndexedDB(options => {
+                options.DbName = "sixrens-indexed-db";
+            });
         }
 
         private static void RegisterProjectServices(IServiceCollection services)
         {
-            _ = services.AddSingleton<ServiceOfSixRens>();
-            _ = services.AddSingleton<DivinationCaseStorager>();
+            _ = services.AddScoped<ServiceOfSixRens>();
+            _ = services.AddScoped<DivinationCaseStorager>();
         }
     }
 }
