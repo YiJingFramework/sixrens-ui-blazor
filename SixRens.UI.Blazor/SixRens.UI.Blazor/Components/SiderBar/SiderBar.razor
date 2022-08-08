@@ -3,13 +3,24 @@
 	{
 		<SiderBar_Unit CaseName="@c" OnSelected="async () => await OnCaseSelected.InvokeAsync(c)"/>
 	}
-	<button class="Add">+</button>
-	<p> 啥 string </p>
+	<div>
+		<button @onclick="Open">+</button>
+	</div>
 </div>
+
+<dialog open hidden="@ShowDialog">
+	<p>打开文件</p>
+	<form method="dialog">
+		<InputFile class="file"></InputFile>
+		<button @onclick="Close">添加</button>
+	</form>
+</dialog>
 
 @inject SixRens.UI.Blazor.Services.DivinationCaseStorager.DivinationCaseStorager storager
 @code {
 	private IEnumerable<string> cases = Array.Empty<string>();
+
+	private bool ShowDialog = false;
 
 	[Parameter]
 	public EventCallback<string> OnCaseSelected { get; set; }
@@ -17,5 +28,15 @@
 	protected override async Task OnInitializedAsync()
 	{
 		this.cases = await storager.ListCases();
+	}
+
+	private void Open()
+	{
+		ShowDialog = true;
+	}
+
+	private void Close()
+	{
+		ShowDialog = false;
 	}
 }

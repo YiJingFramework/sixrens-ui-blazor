@@ -7,10 +7,8 @@
 
 button.Add{
     height:30px;
-    width:auto;
+    width:100%;
     display:block;
-    
-    bottom:0;
     font-weight:700;
     color:lightcyan;
     background-color:darkgrey;
@@ -19,4 +17,11 @@ button.Add{
 
 button.Add:active{
     background-color:lightgreen;
+}
+
+dialog{
+    position:absolute;
+    margin:auto;
+    width:auto;
+    height:auto;
 }
