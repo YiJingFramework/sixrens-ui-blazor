@@ -7,18 +7,21 @@
 <PageTitle>六壬吾心</PageTitle>
 
 <div class="page">
-	<SiderBar OnCaseSelected="OnCaseSelected"/>
-
-	<div class="main" hidden="@(page is not PageDisplayState.Introduction)">
+	<div class="SiderBar">
+		<SiderBar OnCaseSelected="OnCaseSelected"/>
+	</div>
+	<div class="main">
+		<div hidden="@(page is not PageDisplayState.Introduction)">
 		<IntroductionPage />
-	</div>
+		</div>
 
-	<div class="main" hidden="@(page is not PageDisplayState.CaseDisplay)">
+		<div hidden="@(page is not PageDisplayState.CaseDisplay)">
 		<CaseDisplayPage Parameters="@caseDisplayParameters"/>
-	</div>
+		</div>
 
-	<div class="main" hidden="@(page is not PageDisplayState.DivinationPractice)">
+		<div hidden="@(page is not PageDisplayState.DivinationPractice)">
 		<QiKe />
+		</div>
 	</div>
 </div>
 

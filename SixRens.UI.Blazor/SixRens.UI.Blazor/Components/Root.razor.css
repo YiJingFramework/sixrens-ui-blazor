@@ -1,0 +1,17 @@
+﻿div.page {
+    display: grid;
+    grid-template-rows: 100vh;
+    grid-template-columns: 10vw,90vw;
+    width: 100vw;
+    height: 100vh;
+}
+
+div.main{
+    grid-column-start:2;
+    grid-column-end:3;
+}
+
+div.SiderBar{
+    grid-column-start:1;
+    grid-column-end:2;
+}
