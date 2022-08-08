@@ -1,1 +1,9 @@
-﻿<div>Hello World!</div>
+﻿<button @onclick="async () => await OnPracticeDivinationClicked.InvokeAsync()">
+	点击起课捏！
+</button>
+
+@code
+{
+	[Parameter]
+	public EventCallback OnPracticeDivinationClicked { get; set; }
+}

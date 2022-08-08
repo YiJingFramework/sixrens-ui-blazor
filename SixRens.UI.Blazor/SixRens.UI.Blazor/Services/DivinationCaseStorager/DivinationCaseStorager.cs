@@ -6,7 +6,7 @@ namespace SixRens.UI.Blazor.Services.DivinationCaseStorager
 {
     public sealed partial class DivinationCaseStorager
     {
-        private sealed record Item(long? Id, string Name, string Content);
+        private sealed record Item(long? id, string name, string content);
 
         public async Task AddCase(string name, 占例 dCase)
         {
@@ -30,7 +30,7 @@ namespace SixRens.UI.Blazor.Services.DivinationCaseStorager
         {
             await EnsureStore();
             var result = await dbManager.GetRecordById<long, Item>(Names.IndexedDb.DivinationCases, id);
-            return (result.Name, 占例.反序列化(result.Content));
+            return (result.name, 占例.反序列化(result.content));
         }
 
         public async Task<IEnumerable<(long id, string name)>> ListCases()
@@ -39,8 +39,8 @@ namespace SixRens.UI.Blazor.Services.DivinationCaseStorager
             {
                 foreach(var item in items)
                 {
-                    Debug.Assert(item.Id.HasValue);
-                    yield return (item.Id.Value, item.Name);
+                    Debug.Assert(item.id.HasValue);
+                    yield return (item.id.Value, item.name);
                 }
             }
             await EnsureStore();
@@ -70,15 +70,15 @@ namespace SixRens.UI.Blazor.Services.DivinationCaseStorager
             var storeSchema = new StoreSchema {
                 Name = Names.IndexedDb.DivinationCases,
                 PrimaryKey = new() {
-                    Name = nameof(Item.Id),
-                    KeyPath = nameof(Item.Id),
+                    Name = nameof(Item.id),
+                    KeyPath = nameof(Item.id),
                     Unique = true,
                     Auto = true
                 },
                 Indexes = new() {
                     new() {
-                        Name = nameof(Item.Name),
-                        KeyPath = nameof(Item.Name),
+                        Name = nameof(Item.name),
+                        KeyPath = nameof(Item.name),
                         Unique = false,
                         Auto = false
                     }

@@ -9,7 +9,7 @@ namespace SixRens.UI.Blazor.Services.SixRens
     {
         private sealed class PresetSaver : I预设管理器储存器
         {
-            private sealed record Item(string Name, string Content);
+            private sealed record Item(string name, string content);
 
             private readonly Dictionary<string, string> items;
             private readonly IndexedDBManager dbManager;
@@ -23,15 +23,15 @@ namespace SixRens.UI.Blazor.Services.SixRens
                 var storeSchema = new StoreSchema {
                     Name = Names.IndexedDb.SixRensPresets,
                     PrimaryKey = new() {
-                        Name = nameof(Item.Name),
-                        KeyPath = nameof(Item.Name),
+                        Name = nameof(Item.name),
+                        KeyPath = nameof(Item.name),
                         Unique = true,
                         Auto = false
                     }
                 };
                 await dbManager.AddNewStore(storeSchema);
                 var records = await dbManager.GetRecords<Item>(Names.IndexedDb.SixRensPlugins);
-                return new(dbManager, records.ToDictionary(item => item.Name, item => item.Content));
+                return new(dbManager, records.ToDictionary(item => item.name, item => item.content));
             }
 
             public IEnumerable<(string 预设名, string 内容)> 获取所有预设文件()

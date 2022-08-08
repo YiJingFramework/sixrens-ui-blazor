@@ -9,7 +9,7 @@ namespace SixRens.UI.Blazor.Services.SixRens
     {
         private sealed class PluginPackageSaver : I插件包管理器储存器
         {
-            private sealed record Item(string Name, byte[] Content);
+            private sealed record Item(string name, byte[] content);
 
             private readonly Dictionary<string, byte[]> items;
             private readonly IndexedDBManager dbManager;
@@ -23,15 +23,15 @@ namespace SixRens.UI.Blazor.Services.SixRens
                 var storeSchema = new StoreSchema {
                     Name = Names.IndexedDb.SixRensPlugins,
                     PrimaryKey = new() {
-                        Name = nameof(Item.Name),
-                        KeyPath = nameof(Item.Name),
+                        Name = nameof(Item.name),
+                        KeyPath = nameof(Item.name),
                         Unique = true,
                         Auto = false
                     }
                 };
                 await dbManager.AddNewStore(storeSchema);
                 var records = await dbManager.GetRecords<Item>(Names.IndexedDb.SixRensPlugins);
-                return new(dbManager, records.ToDictionary(item => item.Name, item => item.Content));
+                return new(dbManager, records.ToDictionary(item => item.name, item => item.content));
             }
 
             public string 储存插件包文件(Stream 插件包)

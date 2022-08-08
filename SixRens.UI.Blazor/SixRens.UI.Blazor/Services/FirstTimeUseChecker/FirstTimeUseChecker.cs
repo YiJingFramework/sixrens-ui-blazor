@@ -4,14 +4,14 @@ namespace SixRens.UI.Blazor.Services.FirstTimeUseChecker
 {
     public sealed partial class FirstTimeUseChecker
     {
-        private sealed record Item(string UsedVersion);
+        private sealed record Item(string usedVersion);
 
         public async Task<bool> HasUsed(string version)
         {
             await EnsureStore();
             var query = new StoreIndexQuery<string> {
                 Storename = Names.IndexedDb.FirstTimeUse,
-                IndexName = nameof(Item.UsedVersion),
+                IndexName = nameof(Item.usedVersion),
                 QueryValue = version
             };
             var result = await dbManager.GetRecordByIndex<string, Item>(query);
@@ -44,8 +44,8 @@ namespace SixRens.UI.Blazor.Services.FirstTimeUseChecker
             var storeSchema = new StoreSchema {
                 Name = Names.IndexedDb.FirstTimeUse,
                 PrimaryKey = new() {
-                    Name = nameof(Item.UsedVersion),
-                    KeyPath = nameof(Item.UsedVersion),
+                    Name = nameof(Item.usedVersion),
+                    KeyPath = nameof(Item.usedVersion),
                     Unique = true,
                     Auto = false
                 }

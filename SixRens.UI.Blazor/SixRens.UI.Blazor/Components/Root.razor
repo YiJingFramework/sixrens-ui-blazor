@@ -8,19 +8,19 @@
 
 <div class="page">
 	<div class="SiderBar">
-		<SiderBar OnCaseSelected="OnCaseSelected"/>
+		<SiderBar OnCaseSelected="SwitchToCaseDisplayPage"/>
 	</div>
 	<div class="main">
-		<div hidden="@(page is not PageDisplayState.Introduction)">
-		<IntroductionPage />
+		<div hidden="@(introductionParameters is null)">
+			<IntroductionPage OnPracticeDivinationClicked="SwitchToDivinationPracticePage"/>
 		</div>
 
-		<div hidden="@(page is not PageDisplayState.CaseDisplay)">
-		<CaseDisplayPage Parameters="@caseDisplayParameters"/>
+		<div hidden="@(caseDisplayParameters is null)">
+			<CaseDisplayPage Parameters="@caseDisplayParameters"/>
 		</div>
 
-		<div hidden="@(page is not PageDisplayState.DivinationPractice)">
-		<QiKe />
+		<div hidden="@(divinationPracticeParameters is null)">
+			<QiKe />
 		</div>
 	</div>
 </div>
@@ -29,22 +29,36 @@
 @inject SixRens.UI.Blazor.Services.DivinationCaseStorager.DivinationCaseStorager storager
 @code
 {
-	private PageDisplayState page = PageDisplayState.Introduction;
-	private enum PageDisplayState
+	private object? introductionParameters;
+	private CaseDisplayParameters? caseDisplayParameters;
+	private object? divinationPracticeParameters;
+	private void ClearPageParameters()
 	{
-		Introduction,
-		CaseDisplay,
-		DivinationPractice
+		introductionParameters = null;	
+		caseDisplayParameters = null;	
+		divinationPracticeParameters = null;	
 	}
 
-	private CaseDisplayParameters? caseDisplayParameters;
 
-	private async Task OnCaseSelected(long caseId)
+	protected override async Task OnInitializedAsync()
 	{
-		page = PageDisplayState.CaseDisplay;
-		var c = await storager.GetCase(caseId);
-		this.caseDisplayParameters = new(c.dCase, c.name);
+		ClearPageParameters();
+		introductionParameters = new();
+		this.StateHasChanged();
+	}
 
+	private async Task SwitchToCaseDisplayPage(long caseId)
+	{
+		var c = await storager.GetCase(caseId);
+		ClearPageParameters();
+		this.caseDisplayParameters = new(c.dCase, c.name);
+		this.StateHasChanged();
+	}
+
+	private async Task SwitchToDivinationPracticePage()
+	{
+		ClearPageParameters();
+		divinationPracticeParameters = new();
 		this.StateHasChanged();
 	}
 }
