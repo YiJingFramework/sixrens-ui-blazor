@@ -1,4 +1,7 @@
 ﻿<div>
+	<div>
+		<button @onclick="async () => await OnTitleClicked.InvokeAsync()">六壬吾心</button>
+	</div>
 	@foreach(var group in cases)
 	{
 		<text>@group.Key</text>
@@ -24,6 +27,9 @@
 		= Array.Empty<IGrouping<string, (long id, string name)>>();
 
 	private bool ShowDialog = false;
+	
+	[Parameter]
+	public EventCallback OnTitleClicked { get; set; }
 
 	[Parameter]
 	public EventCallback<long> OnCaseSelected { get; set; }

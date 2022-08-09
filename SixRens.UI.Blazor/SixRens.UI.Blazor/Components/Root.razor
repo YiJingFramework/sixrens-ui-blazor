@@ -8,7 +8,9 @@
 
 <div class="page">
 	<div class="SiderBar">
-		<Sidebar OnCaseSelected="SwitchToCaseDisplayPage"/>
+		<Sidebar
+			OnTitleClicked="SwitchToIntroductionPage"
+			OnCaseSelected="SwitchToCaseDisplayPage"/>
 	</div>
 	<div class="main">
 		<div hidden="@(introductionParameters is null)">
@@ -20,7 +22,7 @@
 		</div>
 
 		<div hidden="@(divinationPracticeParameters is null)">
-			<DivinationPracticePage />
+			<DivinationPracticePage Parameters="divinationPracticeParameters"/>
 		</div>
 	</div>
 </div>
@@ -31,7 +33,7 @@
 {
 	private object? introductionParameters;
 	private CaseDisplayParameters? caseDisplayParameters;
-	private object? divinationPracticeParameters;
+	private DivinationPracticeParameters? divinationPracticeParameters;
 	private void ClearPageParameters()
 	{
 		introductionParameters = null;	
@@ -47,6 +49,13 @@
 		this.StateHasChanged();
 	}
 
+	private async Task SwitchToIntroductionPage()
+	{
+		ClearPageParameters();
+		this.introductionParameters = new();
+		this.StateHasChanged();
+	}
+
 	private async Task SwitchToCaseDisplayPage(long caseId)
 	{
 		var c = await storager.GetCase(caseId);
@@ -58,7 +67,7 @@
 	private async Task SwitchToDivinationPracticePage()
 	{
 		ClearPageParameters();
-		divinationPracticeParameters = new();
+		divinationPracticeParameters = new(DateTime.Now);
 		this.StateHasChanged();
 	}
 }
