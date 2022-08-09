@@ -5,9 +5,9 @@
 
 <PageTitle>起课</PageTitle>
 <body>
-	<EditForm Model=@Time>
-		<InputDate @bind-Value=@Date/>
-		<input type="time" @bind-value=@Time/>
+	<EditForm Model=@time>
+		<InputDate @bind-Value=@date/>
+		<input type="time" @bind-value=@time/>
 	</EditForm>
 	
 	<button @onclick="ImportTestingCase">导入测试用占例到 IndexedDb 占例库</button>
@@ -20,17 +20,22 @@
 </body>
 
 @code {
-	private DateOnly Date = DateOnly.FromDateTime(DateTime.Now);
-	private TimeOnly Time = TimeOnly.FromDateTime(DateTime.Now);
-	private DateTime Get
+	[Parameter]
+	public DivinationPracticeParameters? Parameters { get; set; }
+
+	private DateOnly date;
+	private TimeOnly time;
+
+	protected override async Task OnParametersSetAsync()
 	{
-		get
-		{
-			return Date.ToDateTime(Time);
-		}
+		if (Parameters is null)
+			return;
+		this.date = DateOnly.FromDateTime(Parameters.dateTime);
+		this.time = TimeOnly.FromDateTime(Parameters.dateTime);
 	}
 
-	private void QiKe_OnClick(){
+	private void QiKe_OnClick()
+	{
 		NavigationManager.NavigateTo("Main");
 	}
 
