@@ -1,17 +1,21 @@
 ﻿div {
     height: 100%;
-    width: 10%;
+    width: auto;
     position: fixed;
 }
 
 button.Add{
-    height:30px;
+    height:auto;
     width:100%;
     display:block;
-    font-weight:700;
-    color:lightcyan;
-    background-color:darkgrey;
-    border-style:none;
+    font-weight:900;
+    color:black;
+    background-color:white;
+    border:5px solid black;
+    box-sizing:border-box;
+    border-radius:10px;
+    margin:10px;
+    font-size:max(12px,1.6vh);
 }
 
 button.Add:active{

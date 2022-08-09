@@ -5,10 +5,8 @@
     grid-template-columns: repeat(4,25%);
     align-items:center;
     justify-items:center;
-    width:50vw;
-    height:50vw;
-    min-height:400px;
-    min-width:400px;
+    width: 50vw;
+    height: 50vw;
 }
 div.TianPan-Item {
     background-color: white;
@@ -16,7 +14,7 @@ div.TianPan-Item {
     height: 100%;
     border: 0.1cm solid red;
     text-align: center;
-    font-size: max(2vw,16px);
+    font-size: 2vw;
 }
 div.bigbox{
     grid-row-start:2;

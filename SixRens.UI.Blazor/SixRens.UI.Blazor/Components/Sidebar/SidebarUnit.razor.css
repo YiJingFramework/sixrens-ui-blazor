@@ -1,8 +1,13 @@
 ﻿div {
-    color: lightcyan;
-    background-color: darkgrey;
-    width: 100%;
-    font-size: max(15px,3.5vh);
+    color: black;
+    background-color: white;
+    width: auto;
+    font-size: max(15px,2vh);
+    border-radius:10px;
+    border:5px solid black;
+    margin: 10px 10px 10px 10px;
+    box-sizing:border-box;
+    text-align:center;
 }
 
 div:hover{
