@@ -1,4 +1,4 @@
-﻿@using SixRens.UI.Blazor.Components.SiderBar
+﻿@using SixRens.UI.Blazor.Components.Sidebar
 @using SixRens.UI.Blazor.Components.Pages.CaseDisplay
 @using SixRens.UI.Blazor.Components.Pages.DivinationPractice
 @using SixRens.UI.Blazor.Components.Pages.Introduction
@@ -8,7 +8,7 @@
 
 <div class="page">
 	<div class="SiderBar">
-		<SiderBar OnCaseSelected="SwitchToCaseDisplayPage"/>
+		<Sidebar OnCaseSelected="SwitchToCaseDisplayPage"/>
 	</div>
 	<div class="main">
 		<div hidden="@(introductionParameters is null)">
@@ -20,7 +20,7 @@
 		</div>
 
 		<div hidden="@(divinationPracticeParameters is null)">
-			<QiKe />
+			<DivinationPracticePage />
 		</div>
 	</div>
 </div>

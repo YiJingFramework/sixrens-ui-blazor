@@ -4,7 +4,7 @@
 		<text>@group.Key</text>
 		foreach(var c in group)
 		{
-			<SiderBar_Unit CaseName="@(c.name)" OnSelected="async () => await OnCaseSelected.InvokeAsync(c.id)"/>
+			<SidebarUnit CaseName="@(c.name)" OnSelected="async () => await OnCaseSelected.InvokeAsync(c.id)"/>
 		}
 	}
 	<div>

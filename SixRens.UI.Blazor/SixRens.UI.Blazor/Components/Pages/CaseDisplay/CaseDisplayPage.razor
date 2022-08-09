@@ -6,9 +6,9 @@
 <p> @Parameters?.CaseName </p>
 <div class="main">
 	<Calendar />
-	<SanZhuan Plate="Parameters?.Case?.壬式"/>
+	<ThreeMoves Plate="Parameters?.Case?.壬式"/>
 </div>
-<TianPan Plate="Parameters?.Case?.壬式"/>
+<BranchPlate Plate="Parameters?.Case?.壬式"/>
 
 @inject ILogger<CaseDisplayPage> logger
 @inject SixRens.UI.Blazor.Services.DivinationCaseStorager.DivinationCaseStorager storager
