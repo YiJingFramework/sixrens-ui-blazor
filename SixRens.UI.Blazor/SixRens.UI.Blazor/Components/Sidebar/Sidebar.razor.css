@@ -1,4 +1,4 @@
-﻿div {
+﻿div.SiderBar {
     height: 100%;
     width: auto;
     position: fixed;
@@ -45,4 +45,8 @@ button.AddFile {
 
 .file{
     opacity : 0;
+}
+
+text{
+    display:block;
 }
