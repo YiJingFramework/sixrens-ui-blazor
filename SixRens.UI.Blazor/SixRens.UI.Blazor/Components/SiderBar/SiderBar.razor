@@ -8,15 +8,13 @@
 	</div>
 </div>
 
-<div hidden="@ShowDialog">
-	<dialog>
+<dialog open="@ShowDialog">
 		<p>打开文件</p>
 		<form method="dialog">
-			<InputFile class="file"></InputFile>
-			<button @onclick="Close">添加</button>
+			<input type="file" class="file"/>
+			<button class="AddFile" @onclick="Close">添加</button>
 		</form>
-	</dialog>
-</div>
+</dialog>
 
 @inject SixRens.UI.Blazor.Services.DivinationCaseStorager.DivinationCaseStorager storager
 @code {

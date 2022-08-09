@@ -1,7 +1,7 @@
 ﻿div.page {
     display: grid;
-    grid-template-rows: 100vh;
-    grid-template-columns: 10vw,90vw;
+    grid-template-rows: 100%;
+    grid-template-columns: 10% 90%;
     width: 100vw;
     height: 100vh;
 }
