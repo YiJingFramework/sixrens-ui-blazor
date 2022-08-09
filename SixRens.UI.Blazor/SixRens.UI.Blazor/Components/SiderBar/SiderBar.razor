@@ -1,7 +1,11 @@
 ﻿<div>
-	@foreach(var c in cases)
+	@foreach(var group in cases)
 	{
-		<SiderBar_Unit CaseName="@(c.name)" OnSelected="async () => await OnCaseSelected.InvokeAsync(c.id)"/>
+		<text>@group.Key</text>
+		foreach(var c in group)
+		{
+			<SiderBar_Unit CaseName="@(c.name)" OnSelected="async () => await OnCaseSelected.InvokeAsync(c.id)"/>
+		}
 	}
 	<div>
 		<button @onclick="Open">+</button>
@@ -18,7 +22,8 @@
 
 @inject SixRens.UI.Blazor.Services.DivinationCaseStorager.DivinationCaseStorager storager
 @code {
-	private IEnumerable<(long id, string name)> cases = Array.Empty<(long, string)>();
+	private IEnumerable<IGrouping<string, (long id, string name)>> cases 
+		= Array.Empty<IGrouping<string, (long id, string name)>>();
 
 	private bool ShowDialog = false;
 
@@ -27,7 +32,8 @@
 
 	protected override async Task OnInitializedAsync()
 	{
-		this.cases = await storager.ListCases();
+		var cases = await storager.ListCases();
+		this.cases = cases.GroupBy(c => c.group, c => (c.id, c.name));
 	}
 
 	private void Open()

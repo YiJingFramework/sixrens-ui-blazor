@@ -11,7 +11,7 @@ namespace SixRens.UI.Blazor.Services.SixRens
         {
             if (this.pluginPackageManager is null)
             {
-                var saver = await PluginPackageSaver.Create(dBManager);
+                var saver = await PluginPackageSaver.Create(this.dBManager);
                 this.pluginPackageManager = new(saver);
             }
             return this.pluginPackageManager;
@@ -22,7 +22,7 @@ namespace SixRens.UI.Blazor.Services.SixRens
         {
             if (this.presetManager is null)
             {
-                var saver = await PresetSaver.Create(dBManager);
+                var saver = await PresetSaver.Create(this.dBManager);
                 this.presetManager = new(saver);
             }
             return this.presetManager;

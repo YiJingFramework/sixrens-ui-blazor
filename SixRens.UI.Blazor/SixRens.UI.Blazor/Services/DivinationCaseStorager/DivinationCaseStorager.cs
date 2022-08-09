@@ -6,52 +6,54 @@ namespace SixRens.UI.Blazor.Services.DivinationCaseStorager
 {
     public sealed partial class DivinationCaseStorager
     {
-        private sealed record Item(long? id, string name, string content);
+#pragma warning disable IDE1006 // 命名样式
+        private sealed record Item(long? id, string name, string group, string content);
+#pragma warning restore IDE1006 // 命名样式
 
-        public async Task AddCase(string name, 占例 dCase)
+        public async Task AddCase(string name, string group, 占例 dCase)
         {
-            await EnsureStore();
-            await dbManager.AddRecord(new StoreRecord<Item>() {
+            await this.EnsureStore();
+            await this.dbManager.AddRecord(new StoreRecord<Item>() {
                 Storename = Names.IndexedDb.DivinationCases,
-                Data = new(null, name, dCase.序列化())
+                Data = new(null, name, group, dCase.序列化())
             });
         }
 
-        public async Task UpdateCase(long id, string name, 占例 dCase)
+        public async Task UpdateCase(long id, string name, string group, 占例 dCase)
         {
-            await EnsureStore();
-            await dbManager.UpdateRecord(new StoreRecord<Item>() {
+            await this.EnsureStore();
+            await this.dbManager.UpdateRecord(new StoreRecord<Item>() {
                 Storename = Names.IndexedDb.DivinationCases,
-                Data = new(id, name, dCase.序列化()),
+                Data = new(id, name, group, dCase.序列化()),
             });
         }
 
-        public async Task<(string name, 占例 dCase)> GetCase(long id)
+        public async Task<(string name, string group, 占例 dCase)> GetCase(long id)
         {
-            await EnsureStore();
-            var result = await dbManager.GetRecordById<long, Item>(Names.IndexedDb.DivinationCases, id);
-            return (result.name, 占例.反序列化(result.content));
+            await this.EnsureStore();
+            var result = await this.dbManager.GetRecordById<long, Item>(Names.IndexedDb.DivinationCases, id);
+            return (result.name, result.group, 占例.反序列化(result.content));
         }
 
-        public async Task<IEnumerable<(long id, string name)>> ListCases()
+        public async Task<IEnumerable<(long id, string name, string group)>> ListCases()
         {
-            IEnumerable<(long id, string name)> ToReturnType(List<Item> items)
+            IEnumerable<(long id, string name, string group)> ToReturnType(List<Item> items)
             {
-                foreach(var item in items)
+                foreach (var item in items)
                 {
                     Debug.Assert(item.id.HasValue);
-                    yield return (item.id.Value, item.name);
+                    yield return (item.id.Value, item.name, item.group);
                 }
             }
-            await EnsureStore();
-            var result = await dbManager.GetRecords<Item>(Names.IndexedDb.DivinationCases);
+            await this.EnsureStore();
+            var result = await this.dbManager.GetRecords<Item>(Names.IndexedDb.DivinationCases);
             return ToReturnType(result);
         }
 
         public async Task RemoveCase(long id)
         {
-            await EnsureStore();
-            await dbManager.DeleteRecord(Names.IndexedDb.DivinationCases, id);
+            await this.EnsureStore();
+            await this.dbManager.DeleteRecord(Names.IndexedDb.DivinationCases, id);
         }
 
         private readonly IndexedDBManager dbManager;
@@ -64,9 +66,9 @@ namespace SixRens.UI.Blazor.Services.DivinationCaseStorager
         private bool storeEnsured;
         private async Task EnsureStore()
         {
-            if (storeEnsured)
+            if (this.storeEnsured)
                 return;
-            storeEnsured = true;
+            this.storeEnsured = true;
             var storeSchema = new StoreSchema {
                 Name = Names.IndexedDb.DivinationCases,
                 PrimaryKey = new() {
@@ -84,7 +86,7 @@ namespace SixRens.UI.Blazor.Services.DivinationCaseStorager
                     }
                 }
             };
-            await dbManager.AddNewStore(storeSchema);
+            await this.dbManager.AddNewStore(storeSchema);
         }
     }
 }

@@ -38,6 +38,6 @@
     {
         var s = await http.GetStringAsync("temp/testingCase.json");
         var c = Core.占例存取.占例.反序列化(s);
-        await storager.AddCase("testingCase", c);
+        await storager.AddCase("testingCase", "defaultGroup", c);
     }
 }

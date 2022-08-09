@@ -4,28 +4,30 @@ namespace SixRens.UI.Blazor.Services.FirstTimeUseChecker
 {
     public sealed partial class FirstTimeUseChecker
     {
+#pragma warning disable IDE1006 // 命名样式
         private sealed record Item(string usedVersion);
+#pragma warning restore IDE1006 // 命名样式
 
         public async Task<bool> HasUsed(string version)
         {
-            await EnsureStore();
+            await this.EnsureStore();
             var query = new StoreIndexQuery<string> {
                 Storename = Names.IndexedDb.FirstTimeUse,
                 IndexName = nameof(Item.usedVersion),
                 QueryValue = version
             };
-            var result = await dbManager.GetRecordByIndex<string, Item>(query);
+            var result = await this.dbManager.GetRecordByIndex<string, Item>(query);
             return result is not null;
         }
 
         public async Task SetUsed(string version)
         {
-            await EnsureStore();
+            await this.EnsureStore();
             var record = new StoreRecord<Item> {
                 Storename = Names.IndexedDb.FirstTimeUse,
                 Data = new Item(version)
             };
-            await dbManager.AddRecord(record);
+            await this.dbManager.AddRecord(record);
         }
 
         private readonly IndexedDBManager dbManager;
@@ -38,9 +40,9 @@ namespace SixRens.UI.Blazor.Services.FirstTimeUseChecker
         private bool storeEnsured;
         private async Task EnsureStore()
         {
-            if (storeEnsured)
+            if (this.storeEnsured)
                 return;
-            storeEnsured = true;
+            this.storeEnsured = true;
             var storeSchema = new StoreSchema {
                 Name = Names.IndexedDb.FirstTimeUse,
                 PrimaryKey = new() {
@@ -50,7 +52,7 @@ namespace SixRens.UI.Blazor.Services.FirstTimeUseChecker
                     Auto = false
                 }
             };
-            await dbManager.AddNewStore(storeSchema);
+            await this.dbManager.AddNewStore(storeSchema);
         }
     }
 }

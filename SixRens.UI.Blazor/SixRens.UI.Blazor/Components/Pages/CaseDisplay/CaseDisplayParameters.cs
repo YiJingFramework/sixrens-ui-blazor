@@ -2,8 +2,8 @@
 
 namespace SixRens.UI.Blazor.Components.Pages.CaseDisplay
 {
-	public sealed record CaseDisplayParameters(
-		占例 Case,
-		string? CaseName)
-	{ }
+    public sealed record CaseDisplayParameters(
+        占例 Case,
+        string? CaseName)
+    { }
 }

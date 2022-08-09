@@ -1,6 +1,4 @@
-﻿using SixRens.Core.插件管理.插件包管理;
-using SixRens.Core.插件管理.预设管理;
-using SixRens.UI.Blazor.Extensions;
+﻿using SixRens.Core.插件管理.预设管理;
 using TG.Blazor.IndexedDB;
 
 namespace SixRens.UI.Blazor.Services.SixRens
@@ -9,7 +7,9 @@ namespace SixRens.UI.Blazor.Services.SixRens
     {
         private sealed class PresetSaver : I预设管理器储存器
         {
+#pragma warning disable IDE1006 // 命名样式
             private sealed record Item(string name, string content);
+#pragma warning restore IDE1006 // 命名样式
 
             private readonly Dictionary<string, string> items;
             private readonly IndexedDBManager dbManager;
@@ -36,19 +36,19 @@ namespace SixRens.UI.Blazor.Services.SixRens
 
             public IEnumerable<(string 预设名, string 内容)> 获取所有预设文件()
             {
-                foreach (var item in items)
+                foreach (var item in this.items)
                     yield return (item.Key, item.Value);
             }
 
             public bool 新建预设文件(string 预设名)
             {
-                return items.TryAdd(预设名, string.Empty);
+                return this.items.TryAdd(预设名, string.Empty);
             }
 
             public void 储存预设文件(string 预设名, string 内容)
             {
-                items[预设名] = 内容;
-                _ = dbManager.AddRecord(new StoreRecord<Item>() {
+                this.items[预设名] = 内容;
+                _ = this.dbManager.AddRecord(new StoreRecord<Item>() {
                     Storename = Names.IndexedDb.SixRensPresets,
                     Data = new(预设名, 内容)
                 }).ContinueWith(task => {
@@ -61,8 +61,8 @@ namespace SixRens.UI.Blazor.Services.SixRens
 
             public void 移除预设文件(string 预设名)
             {
-                _ = items.Remove(预设名);
-                _ = dbManager.DeleteRecord(Names.IndexedDb.SixRensPlugins, 预设名)
+                _ = this.items.Remove(预设名);
+                _ = this.dbManager.DeleteRecord(Names.IndexedDb.SixRensPlugins, 预设名)
                     .ContinueWith(task => {
                         if (task.IsFaulted)
                         {

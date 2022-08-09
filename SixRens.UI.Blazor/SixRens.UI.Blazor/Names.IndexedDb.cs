@@ -1,6 +1,6 @@
 ﻿namespace SixRens.UI.Blazor
 {
-    internal static partial class Names 
+    internal static partial class Names
     {
         public static class IndexedDb
         {
