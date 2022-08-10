@@ -2,8 +2,8 @@ using BlazorDownloadFile;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using SixRens.UI.Blazor.Services.DivinationCaseStorager;
+using SixRens.UI.Blazor.Services.FirstTimeUseChecker;
 using SixRens.UI.Blazor.Services.SixRens;
-using TG.Blazor.IndexedDB;
 
 namespace SixRens.UI.Blazor
 {
@@ -29,15 +29,13 @@ namespace SixRens.UI.Blazor
         private static void RegisterThirdPartyServices(IServiceCollection services)
         {
             _ = services.AddBlazorDownloadFile(ServiceLifetime.Singleton);
-            _ = services.AddIndexedDB(options => {
-                options.DbName = "sixrens-indexed-db";
-            });
         }
 
         private static void RegisterProjectServices(IServiceCollection services)
         {
             _ = services.AddScoped<ServiceOfSixRens>();
-            _ = services.AddScoped<DivinationCaseStorager>();
+            FirstTimeUseChecker.InjectAsService(services);
+            DivinationCaseStorager.InjectAsService(services);
         }
     }
 }

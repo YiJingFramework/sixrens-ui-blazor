@@ -1,43 +1,47 @@
 ﻿using SixRens.Core.占例存取;
 using System.Diagnostics;
-using TG.Blazor.IndexedDB;
+using static SixRens.UI.Blazor.Services.DivinationCaseStorager.DivinationCaseStorager.DbSchema.Cases;
 
 namespace SixRens.UI.Blazor.Services.DivinationCaseStorager
 {
     public sealed partial class DivinationCaseStorager
     {
-#pragma warning disable IDE1006 // 命名样式
-        private sealed record Item(long? id, string name, string group, string content);
-#pragma warning restore IDE1006 // 命名样式
+        private readonly DbSchema db;
+        public DivinationCaseStorager(DbSchema db)
+        {
+            this.db = db;
+        }
+        public static void InjectAsService(IServiceCollection services)
+        {
+            _ = services.AddScoped<DbSchema>();
+            _ = services.AddScoped<DivinationCaseStorager>();
+        }
 
         public async Task AddCase(string name, string group, 占例 dCase)
         {
-            await this.EnsureStore();
-            await this.dbManager.AddRecord(new StoreRecord<Item>() {
-                Storename = Names.IndexedDb.DivinationCases,
-                Data = new(null, name, group, dCase.序列化())
-            });
+            await db.Open();
+            await db.CasesStore.Add(new CaseItem(null, name, group, dCase.序列化()));
         }
 
         public async Task UpdateCase(long id, string name, string group, 占例 dCase)
         {
-            await this.EnsureStore();
-            await this.dbManager.UpdateRecord(new StoreRecord<Item>() {
-                Storename = Names.IndexedDb.DivinationCases,
-                Data = new(id, name, group, dCase.序列化()),
-            });
+            await db.Open();
+            await db.CasesStore.Put(new CaseItem(id, name, group, dCase.序列化()));
         }
 
-        public async Task<(string name, string group, 占例 dCase)> GetCase(long id)
+        public async Task<(string name, string group, 占例 dCase)?> GetCase(long id)
         {
-            await this.EnsureStore();
-            var result = await this.dbManager.GetRecordById<long, Item>(Names.IndexedDb.DivinationCases, id);
+            await db.Open();
+            var result = await db.CasesStore.Get<long, CaseItem>(id);
+            if (result is null)
+                return null;
             return (result.name, result.group, 占例.反序列化(result.content));
         }
 
         public async Task<IEnumerable<(long id, string name, string group)>> ListCases()
         {
-            IEnumerable<(long id, string name, string group)> ToReturnType(List<Item> items)
+            IEnumerable<(long id, string name, string group)> ToReturnType(
+                IEnumerable<CaseItem> items)
             {
                 foreach (var item in items)
                 {
@@ -45,48 +49,15 @@ namespace SixRens.UI.Blazor.Services.DivinationCaseStorager
                     yield return (item.id.Value, item.name, item.group);
                 }
             }
-            await this.EnsureStore();
-            var result = await this.dbManager.GetRecords<Item>(Names.IndexedDb.DivinationCases);
+            await db.Open();
+            var result = await db.CasesStore.GetAll<CaseItem>();
             return ToReturnType(result);
         }
 
         public async Task RemoveCase(long id)
         {
-            await this.EnsureStore();
-            await this.dbManager.DeleteRecord(Names.IndexedDb.DivinationCases, id);
-        }
-
-        private readonly IndexedDBManager dbManager;
-        public DivinationCaseStorager(IndexedDBManager dbManager)
-        {
-            this.dbManager = dbManager;
-            this.storeEnsured = false;
-        }
-
-        private bool storeEnsured;
-        private async Task EnsureStore()
-        {
-            if (this.storeEnsured)
-                return;
-            this.storeEnsured = true;
-            var storeSchema = new StoreSchema {
-                Name = Names.IndexedDb.DivinationCases,
-                PrimaryKey = new() {
-                    Name = nameof(Item.id),
-                    KeyPath = nameof(Item.id),
-                    Unique = true,
-                    Auto = true
-                },
-                Indexes = new() {
-                    new() {
-                        Name = nameof(Item.name),
-                        KeyPath = nameof(Item.name),
-                        Unique = false,
-                        Auto = false
-                    }
-                }
-            };
-            await this.dbManager.AddNewStore(storeSchema);
+            await db.Open();
+            await db.CasesStore.Delete(id);
         }
     }
 }
