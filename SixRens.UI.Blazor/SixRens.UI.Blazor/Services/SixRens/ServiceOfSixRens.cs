@@ -1,5 +1,6 @@
 ﻿using SixRens.Core.插件管理.插件包管理;
 using SixRens.Core.插件管理.预设管理;
+using TG.Blazor.IndexedDB;
 
 namespace SixRens.UI.Blazor.Services.SixRens
 {
@@ -8,11 +9,10 @@ namespace SixRens.UI.Blazor.Services.SixRens
         private 插件包管理器? pluginPackageManager;
         public async Task<插件包管理器> GetPluginPackageManager()
         {
-            throw new NotImplementedException("没实现呢");
             if (this.pluginPackageManager is null)
             {
-                // var saver = await PluginPackageSaver.Create(this.dBManager);
-                // this.pluginPackageManager = new(saver);
+                var saver = await PluginPackageSaver.Create(this.dBManager);
+                this.pluginPackageManager = new(saver);
             }
             return this.pluginPackageManager;
         }
@@ -20,17 +20,18 @@ namespace SixRens.UI.Blazor.Services.SixRens
         private 预设管理器? presetManager;
         public async Task<预设管理器> GetPresetManager()
         {
-            throw new NotImplementedException("没实现呢");
             if (this.presetManager is null)
             {
-                // var saver = await PresetSaver.Create(this.dBManager);
-                // this.presetManager = new(saver);
+                var saver = await PresetSaver.Create(this.dBManager);
+                this.presetManager = new(saver);
             }
             return this.presetManager;
         }
 
-        public ServiceOfSixRens()
+        private readonly IndexedDBManager dBManager;
+        public ServiceOfSixRens(IndexedDBManager dBManager)
         {
+            this.dBManager = dBManager;
         }
     }
 }

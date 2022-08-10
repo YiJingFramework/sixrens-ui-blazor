@@ -60,10 +60,8 @@
 	private async Task SwitchToCaseDisplayPage(long caseId)
 	{
 		var c = await storager.GetCase(caseId);
-		Debug.Assert(c.HasValue);
-		var cV = c.Value;
 		ClearPageParameters();
-		this.caseDisplayParameters = new(cV.dCase, cV.name);
+		this.caseDisplayParameters = new(c.dCase, c.name);
 		this.StateHasChanged();
 	}
 

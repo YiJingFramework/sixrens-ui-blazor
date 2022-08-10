@@ -1,14 +1,7 @@
 ﻿<button @onclick="async () => await OnPracticeDivinationClicked.InvokeAsync()">
 	点击起课捏！
 </button>
-<button @onclick="A"></button>
 
-<dialog open="@showingFirstTimeDialog">
-	<div>HELLO!</div>
-	<button @onclick="SetNotFirstTimeUse">OK!</button>
-</dialog>
-
-@inject SixRens.UI.Blazor.Services.FirstTimeUseChecker.FirstTimeUseChecker FirstTime
 @code
 {
 	[Parameter]
@@ -16,23 +9,4 @@
 
 	[Parameter]
 	public EventCallback OnPracticeDivinationClicked { get; set; }
-
-	private bool showingFirstTimeDialog = true;
-
-	private const string firstTimeHintVersion = "DEBUGING - 0.0.1";
-
-	protected override async Task OnParametersSetAsync()
-	{
-		showingFirstTimeDialog = !await FirstTime.HasUsed(firstTimeHintVersion);
-	}
-	
-	private async Task A()
-	{
-		showingFirstTimeDialog = !await FirstTime.HasUsed(firstTimeHintVersion);
-	}
-	private async Task SetNotFirstTimeUse()
-	{
-		await FirstTime.SetUsed(firstTimeHintVersion);
-		showingFirstTimeDialog = false;
-	}
 }
