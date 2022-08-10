@@ -18,9 +18,8 @@ namespace SixRens.UI.Blazor.Services.SixRens
                 this.dbManager = dbManager;
                 this.items = items;
             }
-            public static async Task<PresetSaver> Create(IndexedDBManager dbManager)
-            {
-                var storeSchema = new StoreSchema {
+            public static StoreSchema IndexedDbStoreSchema
+                => new StoreSchema {
                     Name = Names.IndexedDb.SixRensPresets,
                     PrimaryKey = new() {
                         Name = nameof(Item.name),
@@ -29,7 +28,8 @@ namespace SixRens.UI.Blazor.Services.SixRens
                         Auto = false
                     }
                 };
-                await dbManager.AddNewStore(storeSchema);
+            public static async Task<PresetSaver> Create(IndexedDBManager dbManager)
+            {
                 var records = await dbManager.GetRecords<Item>(Names.IndexedDb.SixRensPlugins);
                 return new(dbManager, records.ToDictionary(item => item.name, item => item.content));
             }

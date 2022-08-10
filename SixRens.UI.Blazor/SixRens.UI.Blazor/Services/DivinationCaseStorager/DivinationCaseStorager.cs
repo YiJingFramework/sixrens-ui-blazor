@@ -12,7 +12,6 @@ namespace SixRens.UI.Blazor.Services.DivinationCaseStorager
 
         public async Task AddCase(string name, string group, 占例 dCase)
         {
-            await this.EnsureStore();
             await this.dbManager.AddRecord(new StoreRecord<Item>() {
                 Storename = Names.IndexedDb.DivinationCases,
                 Data = new(null, name, group, dCase.序列化())
@@ -21,7 +20,6 @@ namespace SixRens.UI.Blazor.Services.DivinationCaseStorager
 
         public async Task UpdateCase(long id, string name, string group, 占例 dCase)
         {
-            await this.EnsureStore();
             await this.dbManager.UpdateRecord(new StoreRecord<Item>() {
                 Storename = Names.IndexedDb.DivinationCases,
                 Data = new(id, name, group, dCase.序列化()),
@@ -30,7 +28,6 @@ namespace SixRens.UI.Blazor.Services.DivinationCaseStorager
 
         public async Task<(string name, string group, 占例 dCase)> GetCase(long id)
         {
-            await this.EnsureStore();
             var result = await this.dbManager.GetRecordById<long, Item>(Names.IndexedDb.DivinationCases, id);
             return (result.name, result.group, 占例.反序列化(result.content));
         }
@@ -45,14 +42,12 @@ namespace SixRens.UI.Blazor.Services.DivinationCaseStorager
                     yield return (item.id.Value, item.name, item.group);
                 }
             }
-            await this.EnsureStore();
             var result = await this.dbManager.GetRecords<Item>(Names.IndexedDb.DivinationCases);
             return ToReturnType(result);
         }
 
         public async Task RemoveCase(long id)
         {
-            await this.EnsureStore();
             await this.dbManager.DeleteRecord(Names.IndexedDb.DivinationCases, id);
         }
 
@@ -60,16 +55,10 @@ namespace SixRens.UI.Blazor.Services.DivinationCaseStorager
         public DivinationCaseStorager(IndexedDBManager dbManager)
         {
             this.dbManager = dbManager;
-            this.storeEnsured = false;
         }
 
-        private bool storeEnsured;
-        private async Task EnsureStore()
-        {
-            if (this.storeEnsured)
-                return;
-            this.storeEnsured = true;
-            var storeSchema = new StoreSchema {
+        public static StoreSchema IndexedDbStoreSchema
+            => new StoreSchema() {
                 Name = Names.IndexedDb.DivinationCases,
                 PrimaryKey = new() {
                     Name = nameof(Item.id),
@@ -86,7 +75,5 @@ namespace SixRens.UI.Blazor.Services.DivinationCaseStorager
                     }
                 }
             };
-            await this.dbManager.AddNewStore(storeSchema);
-        }
     }
 }
