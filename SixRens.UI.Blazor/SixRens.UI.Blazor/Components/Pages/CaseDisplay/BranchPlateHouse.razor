@@ -1,6 +1,6 @@
-﻿@general <br/>
-<span> @($"{upperBranch:C}") </span> @NullableStemToString(upperStem) <br/>
-@($"{Location:C}{NullableStemToString(lowerStem)}")  
+﻿<p>@general <br/>
+ <span> @($"{upperBranch:C}") </span> @NullableStemToString(upperStem) <br/> 
+@($"{Location:C}{NullableStemToString(lowerStem)}") </p>
 
 @inject ILogger<BranchPlateHouse> logger
 @code 

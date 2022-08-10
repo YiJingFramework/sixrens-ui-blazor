@@ -1,5 +1,8 @@
 ﻿span {
-    font-size: max(4vw,32px); 
     font-weight: 700;
-    font-family: KaiTi;
+    font-family:KaiTi;
+}
+
+p{
+    font-family:KaiTi;
 }
