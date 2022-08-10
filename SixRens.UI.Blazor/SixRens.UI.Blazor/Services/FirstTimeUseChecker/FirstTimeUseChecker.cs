@@ -1,26 +1,32 @@
-﻿using IndexedDB.Blazor;
+﻿using static SixRens.UI.Blazor.Services.FirstTimeUseChecker.FirstTimeUseChecker.DbSchema.Records;
 
 namespace SixRens.UI.Blazor.Services.FirstTimeUseChecker
 {
     public sealed partial class FirstTimeUseChecker
     {
-        private readonly IIndexedDbFactory dbFactory;
-        public FirstTimeUseChecker(IIndexedDbFactory dbFactory)
+        private readonly DbSchema db;
+        public FirstTimeUseChecker(DbSchema db)
         {
-            this.dbFactory = dbFactory;
+            this.db = db;
+        }
+
+        public static void InjectAsService(IServiceCollection services)
+        {
+            _ = services.AddScoped<DbSchema>();
+            _ = services.AddScoped<FirstTimeUseChecker>();
         }
 
         public async Task<bool> HasUsed(string version)
         {
-            using var db = await dbFactory.Create<DbCodeFirst>(Names.IndexedDb.FirstTimeUse);
-            return db.UsedVersions.Any(item => item.VersionName == version);
+            await db.Open();
+            var result = await db.RecordsStore.Get<string, RecordItem>(version);
+            return result is not null;
         }
 
         public async Task SetUsed(string version)
         {
-            using var db = await dbFactory.Create<DbCodeFirst>(Names.IndexedDb.FirstTimeUse);
-            db.UsedVersions.Add(new DbCodeFirst.Item() { VersionName = version });
-            await db.SaveChanges();
+            await db.Open();
+            await db.RecordsStore.Add(new RecordItem(version));
         }
     }
 }
