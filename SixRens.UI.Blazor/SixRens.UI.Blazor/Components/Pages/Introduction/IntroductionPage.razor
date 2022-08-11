@@ -1,21 +1,43 @@
-﻿<button @onclick="async () => await OnPracticeDivinationClicked.InvokeAsync()">
-	点击起课捏！
+﻿<div>欢迎使用六壬吾心！</div>
+
+<div>
+	点击左上角按钮打开侧边栏。
+</div>
+
+<button @onclick="async () => await OnPracticeDivinationClicked.InvokeAsync()">
+	点击起课
 </button>
 
 
 <dialog open="@showingFirstTimeDialog">
-	<div>HELLO!</div>
-	<button @onclick="SetNotFirstTimeUse">OK!</button>
+	<div hidden="@installing">
+		<div>检测到是首次使用六壬吾心。</div>
+		<div>点击下方按钮安装默认插件吧。</div>
+		<button @onclick="InstallDefault">配置默认插件和预设</button>
+		<button @onclick="SetNotFirstTimeUse">关闭</button>
+	</div>
+	<div hidden="@(!installing)">
+		<div>正在安装中……</div>
+	</div>
 </dialog>
 
+@inject SixRens.UI.Blazor.Services.SixRens.ServiceOfSixRens SixRensService
 @inject SixRens.UI.Blazor.Services.FirstTimeUseChecker.FirstTimeUseChecker FirstTime
 @code
 {
-	private bool showingFirstTimeDialog = false;
-	
 	private const string firstTimeHintVersion = "DEBUGING - 0.0.1";
 
-	protected override async Task OnParametersSetAsync()
+	private bool showingFirstTimeDialog = false;
+
+	private bool installing = false;
+
+	[Parameter]
+	public IntroductionParameters? Parameters { get; set; }
+
+	[Parameter]
+	public EventCallback OnPracticeDivinationClicked { get; set; }
+
+	protected override async Task OnInitializedAsync()
 	{
 		showingFirstTimeDialog = !await FirstTime.HasUsed(firstTimeHintVersion);
 	}
@@ -26,9 +48,14 @@
 		showingFirstTimeDialog = false;
 	}
 
-	[Parameter]
-	public IntroductionParameters? Parameters { get; set; }
-
-	[Parameter]
-	public EventCallback OnPracticeDivinationClicked { get; set; }
+	private async Task InstallDefault()
+	{
+		installing = true;
+		_ = SixRensService.InstallDefaultPlugins().ContinueWith(
+			(_) => SixRensService.InstallDefaultPresets().ContinueWith(
+				(_) => {
+					installing = false;
+					this.StateHasChanged();
+				}));
+	}
 }
