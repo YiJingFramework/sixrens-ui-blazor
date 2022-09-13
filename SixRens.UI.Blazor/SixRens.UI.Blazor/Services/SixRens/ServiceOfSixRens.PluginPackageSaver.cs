@@ -12,12 +12,10 @@ namespace SixRens.UI.Blazor.Services.SixRens
             private sealed record Item(string name, byte[] content);
 #pragma warning restore IDE1006 // 命名样式
 
-            private readonly Dictionary<string, byte[]> items;
             private readonly IndexedDBManager dbManager;
-            private PluginPackageSaver(IndexedDBManager dbManager, Dictionary<string, byte[]> items)
+            private PluginPackageSaver(IndexedDBManager dbManager)
             {
                 this.dbManager = dbManager;
-                this.items = items;
             }
 
             public static StoreSchema IndexedDbStoreSchema
@@ -33,55 +31,47 @@ namespace SixRens.UI.Blazor.Services.SixRens
 
             public static async Task<PluginPackageSaver> Create(IndexedDBManager dbManager)
             {
-                var records = await dbManager.GetRecords<Item>(Names.IndexedDb.SixRensPlugins);
-                return new(dbManager, records.ToDictionary(item => item.name, item => item.content));
+                return new(dbManager);
             }
 
-            public string 储存插件包文件(Stream 插件包)
+            public async ValueTask<string> 储存插件包文件(Stream 插件包)
             {
-                var bytes = 插件包.ReadAsBytes();
                 for (; ; )
                 {
                     var randName = Path.GetRandomFileName();
                     randName = Path.GetFileNameWithoutExtension(randName);
-                    if (this.items.TryAdd(randName, bytes))
+
+                    var contains = await this.dbManager.GetRecordById<string, Item>(
+                        Names.IndexedDb.SixRensPlugins, randName);
+                    if (contains is null)
                     {
-                        _ = this.dbManager.AddRecord(new StoreRecord<Item>() {
+                        await this.dbManager.AddRecord(new StoreRecord<Item>() {
                             Storename = Names.IndexedDb.SixRensPlugins,
                             Data = new(randName, 插件包.ReadAsBytes())
-                        }).ContinueWith(task => {
-                            if (task.IsFaulted)
-                            {
-#warning 怎么处理？
-                            }
                         });
+                        return randName;
                     }
                 }
             }
 
-            public void 移除插件包文件(string 插件包文件名)
+            public async ValueTask 移除插件包文件(string 插件包文件名)
             {
-                _ = this.items.Remove(插件包文件名);
-                _ = this.dbManager.DeleteRecord(Names.IndexedDb.SixRensPlugins, 插件包文件名)
-                    .ContinueWith(task => {
-                        if (task.IsFaulted)
-                        {
-#warning 怎么处理？
-                        }
-                    });
+                await this.dbManager.DeleteRecord(Names.IndexedDb.SixRensPlugins, 插件包文件名);
             }
 
-            public IEnumerable<(string 插件包本地识别码, Stream 插件包)> 获取所有插件包文件()
+            public async ValueTask<IEnumerable<(string 插件包本地识别码, Stream 插件包)>> 获取所有插件包文件()
             {
-                foreach (var item in this.items)
-                    yield return (item.Key, new MemoryStream(item.Value));
+                var packages = await this.dbManager.GetRecords<Item>(Names.IndexedDb.SixRensPlugins);
+                return packages.Select(item => (item.name, (Stream)new MemoryStream(item.content)));
             }
 
-            public Stream? 获取插件包文件(string 插件包文件名)
+            public async ValueTask<Stream?> 获取插件包文件(string 插件包文件名)
             {
-                if (this.items.TryGetValue(插件包文件名, out var value))
-                    return new MemoryStream(value);
-                return null;
+                var result = await this.dbManager.GetRecordById<string, Item>(
+                    Names.IndexedDb.SixRensPlugins, 插件包文件名);
+                if (result is null)
+                    return null;
+                return new MemoryStream(result.content);
             }
         }
     }

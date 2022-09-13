@@ -51,8 +51,8 @@
 	private async Task InstallDefault()
 	{
 		installing = true;
-		_ = SixRensService.InstallDefaultPlugins().ContinueWith(
-			(_) => SixRensService.InstallDefaultPresets().ContinueWith(
+		_ = SixRensService.InstallDefaultPlugins().AsTask().ContinueWith(
+			(_) => SixRensService.InstallDefaultPresets().AsTask().ContinueWith(
 				(_) => {
 					installing = false;
 					this.StateHasChanged();

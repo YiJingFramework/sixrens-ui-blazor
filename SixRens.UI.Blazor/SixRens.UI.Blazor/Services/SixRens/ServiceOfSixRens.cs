@@ -22,23 +22,23 @@ namespace SixRens.UI.Blazor.Services.SixRens
             if (this.pluginPackageManager is null)
             {
                 var saver = await PluginPackageSaver.Create(this.dBManager);
-                this.pluginPackageManager = new(saver);
+                this.pluginPackageManager = await 插件包管理器.创建插件包管理器(saver);
             }
             return this.pluginPackageManager;
         }
 
         private 预设管理器? presetManager;
-        public async Task<预设管理器> GetPresetManager()
+        public async ValueTask<预设管理器> GetPresetManager()
         {
             if (this.presetManager is null)
             {
                 var saver = await PresetSaver.Create(this.dBManager);
-                this.presetManager = new(saver);
+                this.presetManager = await 预设管理器.创建预设管理器(saver);
             }
             return this.presetManager;
         }
 
-        public async Task<bool> InstallDefaultPlugins()
+        public async ValueTask<bool> InstallDefaultPlugins()
         {
             using var s = await
                 httpClient.GetStreamAsync("plugin-packages/SixRens.DefaultPlugins-1.14.1.srspg");
@@ -47,20 +47,20 @@ namespace SixRens.UI.Blazor.Services.SixRens
             ms.Position = 0;
             var manager = await GetPluginPackageManager();
             logger.LogError("BEOFRE");
-            var (_, 未加入) = manager.从外部加载插件包(ms);
+            var (_, 未加入) = await manager.从外部加载插件包(ms);
             logger.LogError("AFTER");
             return !未加入;
         }
 
-        public async Task InstallDefaultPresets()
+        public async ValueTask InstallDefaultPresets()
         {
             var s = await
                httpClient.GetStringAsync("default-presets/DefaultPreset.bin");
             var manager = await GetPresetManager();
-            var p = manager.导入预设文件内容("默认预设", s);
+            var p = await manager.导入预设文件内容("默认预设", s);
             for (; p is null;)
             {
-                p = manager.导入预设文件内容($"默认预设（{Guid.NewGuid()}）", s);
+                p = await manager.导入预设文件内容($"默认预设（{Guid.NewGuid()}）", s);
             }
         }
 

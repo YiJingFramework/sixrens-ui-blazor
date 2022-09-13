@@ -8,7 +8,7 @@ namespace SixRens.UI.Blazor.Services.FirstTimeUseChecker
         private sealed record Item(string usedVersion);
 #pragma warning restore IDE1006 // 命名样式
 
-        public async Task<bool> HasUsed(string version)
+        public async ValueTask<bool> HasUsed(string version)
         {
             var query = new StoreIndexQuery<string> {
                 Storename = Names.IndexedDb.FirstTimeUse,
@@ -19,7 +19,7 @@ namespace SixRens.UI.Blazor.Services.FirstTimeUseChecker
             return result.Any(item => item.usedVersion == version);
         }
 
-        public async Task SetUsed(string version)
+        public async ValueTask SetUsed(string version)
         {
             var record = new StoreRecord<Item> {
                 Storename = Names.IndexedDb.FirstTimeUse,

@@ -10,7 +10,7 @@ namespace SixRens.UI.Blazor.Services.DivinationCaseStorager
         private sealed record Item(long? id, string name, string group, string content);
 #pragma warning restore IDE1006 // 命名样式
 
-        public async Task AddCase(string name, string group, 占例 dCase)
+        public async ValueTask AddCase(string name, string group, 占例 dCase)
         {
             await this.dbManager.AddRecord(new StoreRecord<Item>() {
                 Storename = Names.IndexedDb.DivinationCases,
@@ -18,7 +18,7 @@ namespace SixRens.UI.Blazor.Services.DivinationCaseStorager
             });
         }
 
-        public async Task UpdateCase(long id, string name, string group, 占例 dCase)
+        public async ValueTask UpdateCase(long id, string name, string group, 占例 dCase)
         {
             await this.dbManager.UpdateRecord(new StoreRecord<Item>() {
                 Storename = Names.IndexedDb.DivinationCases,
@@ -26,13 +26,13 @@ namespace SixRens.UI.Blazor.Services.DivinationCaseStorager
             });
         }
 
-        public async Task<(string name, string group, 占例 dCase)> GetCase(long id)
+        public async ValueTask<(string name, string group, 占例 dCase)> GetCase(long id)
         {
             var result = await this.dbManager.GetRecordById<long, Item>(Names.IndexedDb.DivinationCases, id);
             return (result.name, result.group, 占例.反序列化(result.content));
         }
 
-        public async Task<IEnumerable<(long id, string name, string group)>> ListCases()
+        public async ValueTask<IEnumerable<(long id, string name, string group)>> ListCases()
         {
             IEnumerable<(long id, string name, string group)> ToReturnType(List<Item> items)
             {
@@ -46,7 +46,7 @@ namespace SixRens.UI.Blazor.Services.DivinationCaseStorager
             return ToReturnType(result);
         }
 
-        public async Task RemoveCase(long id)
+        public async ValueTask RemoveCase(long id)
         {
             await this.dbManager.DeleteRecord(Names.IndexedDb.DivinationCases, id);
         }
