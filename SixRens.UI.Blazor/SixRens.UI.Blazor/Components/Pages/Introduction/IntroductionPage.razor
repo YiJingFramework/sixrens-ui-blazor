@@ -1,4 +1,7 @@
-﻿<div>欢迎使用六壬吾心！</div>
+﻿<div>
+	<p>欢迎您使用六壬吾心！</p>
+	<p>弘扬传统文化，拒绝封建迷信。</p>
+</div>
 
 <div>
 	点击左上角按钮打开侧边栏。
@@ -10,15 +13,30 @@
 
 
 <dialog open="@showingFirstTimeDialog">
+	<div>
+		<div>
+			<p>欢迎您使用六壬吾心！</p>
+			<p>弘扬传统文化，拒绝封建迷信。</p>
+		</div>
+		<div>
+			<p>使用六壬吾心前，您可能要先了解以下事项：</p>
+			<p>六壬吾心是一个开源项目。如果在使用过程中遇到问题，欢迎在仓库中联系我们，甚至是提交您的代码。</p>
+			<p>我们不对六壬吾心的可靠性作出任何保证。如果出现问题，我们对此感到抱歉，但不会承担任何责任或赔偿。</p>
+			<p>六壬吾心的起课是基于插件机制的。如果您对目前的起课结果不满意，可以另寻第三方插件或是自己编写插件，我们也不会对起课结果负责。</p>
+			<p>六壬吾心主体的功能在本地运行，所有信息在本地保存。如果内容重要，请另行导出、备份，否则丢失后将无法找回。</p>
+			<p>最后，祝您使用愉快。</p>
+		</div>
+	</div>
 	<div hidden="@installing">
-		<div>检测到是首次使用六壬吾心。</div>
-		<div>点击下方按钮安装默认插件吧。</div>
-		<button @onclick="InstallDefault">配置默认插件和预设</button>
-		<button @onclick="SetNotFirstTimeUse">关闭</button>
+		<div>
+			检测到您没有安装任何插件，点击按钮可以安装默认插件和预设。
+		</div>
+		<button @onclick="InstallDefault">安装默认插件和预设</button>
 	</div>
 	<div hidden="@(!installing)">
 		<div>正在安装中……</div>
 	</div>
+	<button @onclick="SetNotFirstTimeUse" disabled="@installing">我知道了</button>
 </dialog>
 
 @inject SixRens.UI.Blazor.Services.SixRens.ServiceOfSixRens SixRensService
@@ -51,11 +69,8 @@
 	private async Task InstallDefault()
 	{
 		installing = true;
-		_ = SixRensService.InstallDefaultPlugins().AsTask().ContinueWith(
-			(_) => SixRensService.InstallDefaultPresets().AsTask().ContinueWith(
-				(_) => {
-					installing = false;
-					this.StateHasChanged();
-				}));
+		_ = await SixRensService.InstallDefaultPlugins();
+		await SixRensService.InstallDefaultPresets();
+		installing = false;
 	}
 }

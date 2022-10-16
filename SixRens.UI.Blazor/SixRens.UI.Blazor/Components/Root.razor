@@ -2,51 +2,73 @@
 @using SixRens.UI.Blazor.Components.Pages.CaseDisplay
 @using SixRens.UI.Blazor.Components.Pages.DivinationPractice
 @using SixRens.UI.Blazor.Components.Pages.Introduction
+@using SixRens.UI.Blazor.Components.Pages.PackageError
 @using System.Diagnostics
 
 <PageTitle>六壬吾心</PageTitle>
+
 <body>
-<div class="page">
-	<div class="SiderBar">
-		<Sidebar
-			OnTitleClicked="SwitchToIntroductionPage"
-			OnCaseSelected="SwitchToCaseDisplayPage"/>
-	</div>
-	<div class="main">
-		<div hidden="@(introductionParameters is null)">
-			<IntroductionPage OnPracticeDivinationClicked="SwitchToDivinationPracticePage"/>
-		</div>
-
-		<div hidden="@(caseDisplayParameters is null)">
-			<CaseDisplayPage Parameters="@caseDisplayParameters"/>
-		</div>
-
-		<div hidden="@(divinationPracticeParameters is null)">
-			<DivinationPracticePage Parameters="divinationPracticeParameters"/>
+	<div class="page" hidden="@(!OnSevereError)">
+		<div hidden="@(packageErrorParameters is null)">
+			<PackageErrorPage Parameters="@packageErrorParameters"
+				OnProblemSolved="SwitchToIntroductionPage" />
 		</div>
 	</div>
-</div>
+	<div class="page" hidden="@(OnSevereError)">
+		<div class="SiderBar">
+			<Sidebar
+				OnTitleClicked="SwitchToIntroductionPage"
+				OnCaseSelected="SwitchToCaseDisplayPage"/>
+		</div>
+		<div class="main">
+			<div hidden="@(introductionParameters is null)">
+				<IntroductionPage Parameters="@introductionParameters"
+					OnPracticeDivinationClicked="SwitchToDivinationPracticePage"/>
+			</div>
+
+			<div hidden="@(caseDisplayParameters is null)">
+				<CaseDisplayPage Parameters="@caseDisplayParameters"/>
+			</div>
+
+			<div hidden="@(divinationPracticeParameters is null)">
+				<DivinationPracticePage Parameters="divinationPracticeParameters"/>
+			</div>
+		</div>
+	</div>
 </body>
 
 @inject ILogger<Root> logger
 @inject SixRens.UI.Blazor.Services.DivinationCaseStorager.DivinationCaseStorager storager
+@inject SixRens.UI.Blazor.Services.SixRens.ServiceOfSixRens SixRensService
 @code
 {
-	private object? introductionParameters;
+	private IntroductionParameters? introductionParameters;
 	private CaseDisplayParameters? caseDisplayParameters;
 	private DivinationPracticeParameters? divinationPracticeParameters;
+
+	private PackageErrorParameters? packageErrorParameters;
+	private bool OnSevereError => packageErrorParameters is not null;
+
 	private void ClearPageParameters()
 	{
-		introductionParameters = null;	
-		caseDisplayParameters = null;	
-		divinationPracticeParameters = null;	
+		introductionParameters = null;
+		caseDisplayParameters = null;
+		divinationPracticeParameters = null;
+		packageErrorParameters = null;
 	}
-
 
 	protected override async Task OnInitializedAsync()
 	{
 		ClearPageParameters();
-		introductionParameters = new();
+		try
+		{
+			await SixRensService.GetPluginPackageManager();
+			introductionParameters = new();
+		}
+		catch
+		{
+			packageErrorParameters = new();
+		}
 		this.StateHasChanged();
 	}
 

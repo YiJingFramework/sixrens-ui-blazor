@@ -1,0 +1,24 @@
+﻿<div>发生了严重错误！</div>
+
+<div>
+	我们无法加载您安装的插件包，可能是多次添加了相同插件包导致的。您现在可以采取以下操作：
+</div>
+
+<button @onclick="async () => { await ClearPackages(); await OnProblemSolved.InvokeAsync(); }">
+	移除所有插件包并返回
+</button>
+
+@inject SixRens.UI.Blazor.Services.SixRens.ServiceOfSixRens SixRensService
+@code
+{
+	[Parameter]
+	public PackageErrorParameters? Parameters { get; set; }
+
+	[Parameter]
+	public EventCallback OnProblemSolved { get; set; }
+
+	private async ValueTask ClearPackages()
+	{
+		await SixRensService.GetPluginPackageManager(true);
+	}
+}

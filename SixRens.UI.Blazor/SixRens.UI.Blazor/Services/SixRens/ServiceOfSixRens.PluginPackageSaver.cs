@@ -73,6 +73,11 @@ namespace SixRens.UI.Blazor.Services.SixRens
                     return null;
                 return new MemoryStream(result.content);
             }
+
+            public async ValueTask ClearPluginsPackages()
+            {
+                await this.dbManager.ClearStore(Names.IndexedDb.SixRensPlugins);
+            }
         }
     }
 }

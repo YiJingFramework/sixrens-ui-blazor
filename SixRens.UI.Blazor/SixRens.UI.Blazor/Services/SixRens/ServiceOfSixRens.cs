@@ -1,6 +1,7 @@
 ﻿using SixRens.Core.插件管理.插件包管理;
 using SixRens.Core.插件管理.预设管理;
 using System.Collections.Generic;
+using System.Diagnostics;
 using TG.Blazor.IndexedDB;
 
 namespace SixRens.UI.Blazor.Services.SixRens
@@ -17,12 +18,22 @@ namespace SixRens.UI.Blazor.Services.SixRens
         }
 
         private 插件包管理器? pluginPackageManager;
-        public async Task<插件包管理器> GetPluginPackageManager()
+        public async Task<插件包管理器> GetPluginPackageManager(bool clearWhenError = false)
         {
             if (this.pluginPackageManager is null)
             {
                 var saver = await PluginPackageSaver.Create(this.dBManager);
-                this.pluginPackageManager = await 插件包管理器.创建插件包管理器(saver);
+                try
+                {
+                    this.pluginPackageManager = await 插件包管理器.创建插件包管理器(saver);
+                }
+                catch
+                {
+                    if (!clearWhenError)
+                        throw;
+                    await saver.ClearPluginsPackages();
+                    this.pluginPackageManager = await 插件包管理器.创建插件包管理器(saver);
+                }
             }
             return this.pluginPackageManager;
         }
@@ -46,10 +57,8 @@ namespace SixRens.UI.Blazor.Services.SixRens
             await s.CopyToAsync(ms);
             ms.Position = 0;
             var manager = await GetPluginPackageManager();
-            logger.LogError("BEOFRE");
-            var (_, 未加入) = await manager.从外部加载插件包(ms);
-            logger.LogError("AFTER");
-            return !未加入;
+            var (_, failed) = await manager.从外部加载插件包(ms);
+            return !failed;
         }
 
         public async ValueTask InstallDefaultPresets()
