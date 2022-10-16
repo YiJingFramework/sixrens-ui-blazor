@@ -1,32 +1,48 @@
 ﻿<div>
 	<div>
 		<p class="SiKe-Title"> 一 </p>
-		<p></p>
-		<p></p>
-		<p></p>
+		<p>@($"{aboveStem:C}")</p>
+		<p>@($"{stem:C}")</p>
 	</div>
 	<div>
 		<p class="SiKe-Title"> 二 </p>
-		<p></p>
-		<p></p>
-		<p></p>
+		<p>@($"{aboveAboveStem:C}")</p>
+		<p>@($"{aboveStem:C}")</p>
 	</div>
 	<div>
 		<p class="SiKe-Title"> 三 </p>
-		<p></p>
-		<p></p>
-		<p></p>
+		<p>@($"{aboveBranch:C}")</p>
+		<p>@($"{branch:C}")</p>
 	</div>
 	<div>
 		<p class="SiKe-Title"> 四 </p>
-		<p></p>
-		<p></p>
-		<p></p>
+		<p>@($"{aboveAboveBranch:C}")</p>
+		<p>@($"{aboveBranch:C}")</p>
 	</div>
 </div>
 
 @code {
 	[Parameter]
-	public char Index { get; set; }
+	public 壬式? Plate { get; set; }
 
+	private HeavenlyStem stem;
+	private EarthlyBranch aboveStem;
+	private EarthlyBranch aboveAboveStem;
+
+	private EarthlyBranch branch;
+	private EarthlyBranch aboveBranch;
+	private EarthlyBranch aboveAboveBranch;
+
+	protected override async Task OnParametersSetAsync()
+	{
+		if (Plate is null)
+			return;
+		this.stem = Plate.四课.日;
+		this.aboveStem = Plate.四课.日阳;
+		this.aboveAboveStem = Plate.四课.日阴;
+
+		this.branch = Plate.四课.辰;
+		this.aboveBranch = Plate.四课.辰阳;
+		this.aboveAboveBranch = Plate.四课.辰阴;
+	}
 }

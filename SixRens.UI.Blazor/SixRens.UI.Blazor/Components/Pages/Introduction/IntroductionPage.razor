@@ -1,18 +1,23 @@
 ﻿<div>
 	<p>欢迎您使用六壬吾心！</p>
 	<p>弘扬传统文化，拒绝封建迷信。</p>
+	<p>
+		<a href="https://github.com/YiJingFramework/sixrens-ui-blazor.git" target="_blank">
+			项目在GitHub开源。
+		</a>
+	</p>
 </div>
 
 <div>
-	点击左上角按钮打开侧边栏。
+	<div>
+		点击左上角按钮打开侧边栏，即可进入功能页面。或者直接点击这里的按钮：
+	</div>
+	<button @onclick="async () => await OnPracticeDivinationClicked.InvokeAsync()">
+		起课
+	</button>
 </div>
 
-<button @onclick="async () => await OnPracticeDivinationClicked.InvokeAsync()">
-	点击起课
-</button>
-
-
-<dialog open="@showingFirstTimeDialog">
+<dialog open="@showingFirstTimeDialog" >
 	<div>
 		<div>
 			<p>欢迎您使用六壬吾心！</p>
@@ -27,7 +32,7 @@
 			<p>最后，祝您使用愉快。</p>
 		</div>
 	</div>
-	<div hidden="@installing">
+	<div hidden="@(installing || !noPluginInstalled)">
 		<div>
 			检测到您没有安装任何插件，点击按钮可以安装默认插件和预设。
 		</div>
@@ -47,6 +52,7 @@
 
 	private bool showingFirstTimeDialog = false;
 
+	private bool noPluginInstalled = false;
 	private bool installing = false;
 
 	[Parameter]
@@ -57,6 +63,7 @@
 
 	protected override async Task OnInitializedAsync()
 	{
+		noPluginInstalled = (await SixRensService.GetPluginPackageManager()).插件包.Count is 0;
 		showingFirstTimeDialog = !await FirstTime.HasUsed(firstTimeHintVersion);
 	}
 
@@ -72,5 +79,6 @@
 		_ = await SixRensService.InstallDefaultPlugins();
 		await SixRensService.InstallDefaultPresets();
 		installing = false;
+		noPluginInstalled = false;
 	}
 }

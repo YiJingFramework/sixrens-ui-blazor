@@ -1,0 +1,18 @@
+﻿div.Date {
+    width: auto;
+}
+p.Date-Title{
+    color:red;
+    font-size:max(2vw,20px);
+}
+p.Date-Date {
+    font-size: max(1.5vw,15px);
+}
+div.Date-Unit {
+    text-align: center;
+    width: 25%;
+    float:left;
+}
+div.datetime {
+    font-size:max(1.5vw ,15px);
+}

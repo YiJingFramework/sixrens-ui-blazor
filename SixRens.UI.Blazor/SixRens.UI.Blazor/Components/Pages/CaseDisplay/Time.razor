@@ -1,0 +1,72 @@
+﻿@using SixRens.Api.实体.起课信息
+    <div class="datetime">
+        <p> 西历：@western </p>
+        <p> 农历：@lunar </p> 
+        <p> @(periodLeader)旬 @(missing)空</p>
+    </div>
+    <div class="Date">
+        <div class="Date-Unit">
+            <p class="Date-Title">年</p>
+            <p class="Date-Date"> @stemOfYear </p>
+            <p class="Date-Date"> @branchOfYear </p>
+        </div>
+        <div class="Date-Unit">
+            <p class="Date-Title">月</p>
+            <p class="Date-Date"> @stemOfMonth </p>
+            <p class="Date-Date"> @branchOfMonth </p>
+        </div>
+        <div class="Date-Unit">
+            <p class="Date-Title">日</p>
+            <p class="Date-Date"> @stemOfDate </p>
+            <p class="Date-Date"> @branchOfDate </p>
+        </div>
+        <div class="Date-Unit">
+            <p class="Date-Title">时</p>
+            <p class="Date-Date"> @stemOfTime </p>
+            <p class="Date-Date"> @branchOfTime </p>
+        </div>
+    </div>
+
+@code {
+	[Parameter]
+	public 占例? Case { get; set; }
+
+    private string western = "";
+    private string lunar = "";
+
+    private string stemOfYear = "";
+    private string branchOfYear = "";
+    private string stemOfMonth = "";
+    private string branchOfMonth = "";
+    private string stemOfDate = "";
+    private string branchOfDate = "";
+    private string stemOfTime = "";
+    private string branchOfTime = "";
+    private string periodLeader = "";
+    private string missing = "";
+
+    private void UpdateCalendar(I年月日时 time, DateTime? western)
+    {
+        this.western = western.HasValue ? $"{western:yyyy-MM-dd HH:mm:ss}" : "";
+
+        stemOfYear = time.年干.ToString("C");
+        branchOfYear = time.年支.ToString("C");
+        stemOfMonth = time.月干.ToString("C");
+        branchOfMonth = time.月支.ToString("C");
+        stemOfDate = time.日干.ToString("C");
+        branchOfDate = time.日支.ToString("C");
+        stemOfTime = time.时干.ToString("C");
+        branchOfTime = time.时支.ToString("C");
+
+        periodLeader = $"{time.旬所在.旬首干:C}{time.旬所在.旬首支:C}";
+        missing = $"{time.旬所在.空亡一:C}{time.旬所在.空亡二:C}";
+        StateHasChanged();
+    }
+    
+	protected override async Task OnParametersSetAsync()
+	{
+        if (Case is null)
+			return;
+        UpdateCalendar(Case.壬式.起课参数.年月日时, Case.西历时间);
+    }
+}
