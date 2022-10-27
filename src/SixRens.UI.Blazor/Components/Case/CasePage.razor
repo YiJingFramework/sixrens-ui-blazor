@@ -1,0 +1,28 @@
+﻿@page "/case/{CaseId}"
+
+<!--
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Counter</h1>
+
+<p role="status">Current count: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+-->
+
+若有占例，且已起课，则在这里显示占例。
+若占例刚被创建，或创建后未曾起课过，则显示起课界面。
+若无法找到占例，则进行相关提示。
+
+@inject SixRens.UI.Blazor.Services.SixRens.ServiceOfSixRens SixRensService
+@inject SixRens.UI.Blazor.Services.DivinationCaseStorager.DivinationCaseStorager CaseStorager
+@code {
+    [Parameter]
+    public long CaseId { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var (name, group, c) = await CaseStorager.GetCase(CaseId);
+    }
+}
